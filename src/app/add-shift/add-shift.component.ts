@@ -4,6 +4,7 @@ const dateFormat = require('dateformat');
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { ShiftsService } from '../shifts.service';
+import { StateService } from '../state.service';
 
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -25,8 +26,9 @@ export class AddShiftComponent implements OnInit {
   public punchShiftFalse: boolean;
   public onShiftStatus: boolean;
   public shiftStatus: string;
+  public stateStatus: boolean;
 
-  constructor(private addShiftService: ShiftsService) { }
+  constructor(private addShiftService: ShiftsService, private stateService: StateService) { }
 
   dateFormControl = new FormControl('', [
     Validators.required,
@@ -49,6 +51,7 @@ export class AddShiftComponent implements OnInit {
       this.punchShiftRes = 'PUNCH SUCCESS: ' + autoShift;
       this.punchShiftTrue = true;
       this.punchShiftFalse = false;
+      this.stateService.setState(!this.stateStatus);
       return;
     }
     this.punchShiftRes = 'Punch FAILED, TRY AGAIN';
@@ -64,7 +67,17 @@ export class AddShiftComponent implements OnInit {
     this.generateShiftRes = '';
   }
 
+  updtateStateStatus() {
+    if (this.stateStatus === true) {
+      this.shiftStatus = 'On Shift';
+    } else {
+      this.shiftStatus = 'Off Shift';
+    }
+  }
+
   ngOnInit() {
+    this.stateStatus = this.stateService.getState();
+    this.updtateStateStatus();
   }
 
 }

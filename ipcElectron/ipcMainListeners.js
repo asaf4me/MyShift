@@ -2,25 +2,40 @@ const { ipcMain } = require('electron');
 const fs = require('fs');
 const path = require('path');
 
-// MongoDB initialize
-// var mongoose = require('mongoose');
-// mongoose.connect('mongodb://localhost:27017/myshifts', { useNewUrlParser: true }).then(
-//     () => { },
-//     (err) => { process.exit(1); }
-// );
-
-// var shift = require('./shiftSchema');
-// var state = require('./stateSchema');
-
 module.exports = () => {
-
+    const dataPath = path.join(__dirname, `/data/userShift.json`);
+    const statePath = path.join(__dirname, `/data/userState.json`);
 
     ipcMain.on('setShift', (e, shift) => {
-        // FS Version
         var json = JSON.stringify(shift);
-        const dataPath = path.join(__dirname, `/data/userShift.json`);
         fs.appendFile(dataPath, json, (err) => {
             if (err) throw err;
         });
+        // Retrun to rendered proccess that everything is O.K
     });
+
+    ipcMain.on('getState', (e) => {
+        var state = fs.readFileSync(statePath,'utf8');
+        if(state === "") {
+            state = false; // First initilize
+            setState(state);
+        }
+        if(state === "true"){
+            e.returnValue = true;
+        } else {
+            e.returnValue = false;
+        }   
+    });
+
+    ipcMain.on('setState', (e,state) => {
+        setState(state);
+        e.returnValue = true;
+    })
+
+    function setState(state) {
+        var jsonState = JSON.stringify(state);
+        fs.writeFile(statePath, jsonState, (err) => {
+            if (err) throw err;
+        });
+    }
 }

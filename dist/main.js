@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center;\">Punch Now</mat-card-title>\n    <button mat-raised-button style=\"width: 50%; background-color: firebrick; left: 25%\" (click)=\"autoPunch()\">PUNCH</button>\n    <p></p>\n    <mat-error *ngIf=\"punchShiftTrue\" style=\"color:green;\">{{punchShiftRes}}</mat-error>\n    <mat-error *ngIf=\"punchShiftFalse\">{{punchShiftRes}}</mat-error>\n</mat-card>\n<p></p>\n<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center\">Generate Shift</mat-card-title>\n    <mat-form-field class=\"example-full-width\">\n        <input #g_date matInput [min]=\"minDate\" [max]=\"maxDate\" [matDatepicker]=\"picker\" placeholder=\"Choose a date\"\n            [formControl]=\"dateFormControl\" [errorStateMatcher]=\"matcherDate\" />\n        <mat-datepicker-toggle matSuffix [for]=\"picker\"></mat-datepicker-toggle>\n        <mat-datepicker #picker></mat-datepicker>\n        <mat-error *ngIf=\"dateFormControl.hasError('required')\">Date is <strong>required</strong></mat-error>\n    </mat-form-field>\n\n    <mat-form-field class=\"example-full-width\">\n        <input #g_start matInput placeholder=\"Choose the start time\" [formControl]=\"startTimeFormControl\"\n            [errorStateMatcher]=\"matcherSTime\" />\n        <mat-error *ngIf=\"startTimeFormControl.hasError('required')\">Start time is <strong>required</strong></mat-error>\n    </mat-form-field>:\n\n    <mat-form-field class=\"example-full-width\">\n        <input #g_end matInput placeholder=\"Choose the end time\" [formControl]=\"endTimeFormControl\" [errorStateMatcher]=\"matcherETime\" />\n        <mat-error *ngIf=\"endTimeFormControl.hasError('required')\">End time is <strong>required</strong></mat-error>\n    </mat-form-field>\n    <p></p>\n    <button mat-raised-button style=\"width: 20%; background-color: firebrick;\" (click)=generatePunch(g_date.value,g_start.value,g_end.value)>PUNCH</button>\n    <mat-error>{{generateShiftRes}}</mat-error>\n</mat-card>\n\n<p></p>\n<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center\">Your Shift Status</mat-card-title>\n    <span>{{shiftStatus}}</span>\n</mat-card>"
+module.exports = "<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center;\">Punch Now</mat-card-title>\n    <button mat-raised-button style=\"width: 50%; background-color: firebrick; left: 25%\" (click)=\"autoPunch()\">PUNCH</button>\n    <p></p>\n    <mat-error *ngIf=\"punchShiftTrue\" style=\"color:green;\">{{punchShiftRes}}</mat-error>\n    <mat-error *ngIf=\"punchShiftFalse\">{{punchShiftRes}}</mat-error>\n</mat-card>\n<p></p>\n<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center\">Generate Shift</mat-card-title>\n    <mat-form-field class=\"example-full-width\">\n        <input #g_date matInput [min]=\"minDate\" [max]=\"maxDate\" [matDatepicker]=\"picker\" placeholder=\"Choose a date\"\n            [formControl]=\"dateFormControl\" [errorStateMatcher]=\"matcherDate\" />\n        <mat-datepicker-toggle matSuffix [for]=\"picker\"></mat-datepicker-toggle>\n        <mat-datepicker #picker></mat-datepicker>\n        <mat-error *ngIf=\"dateFormControl.hasError('required')\">Date is <strong>required</strong></mat-error>\n    </mat-form-field>\n\n    <mat-form-field class=\"example-full-width\">\n        <input #g_start matInput placeholder=\"Choose the start time\" [formControl]=\"startTimeFormControl\"\n            [errorStateMatcher]=\"matcherSTime\" />\n        <mat-error *ngIf=\"startTimeFormControl.hasError('required')\">Start time is <strong>required</strong></mat-error>\n    </mat-form-field>:\n\n    <mat-form-field class=\"example-full-width\">\n        <input #g_end matInput placeholder=\"Choose the end time\" [formControl]=\"endTimeFormControl\" [errorStateMatcher]=\"matcherETime\" />\n        <mat-error *ngIf=\"endTimeFormControl.hasError('required')\">End time is <strong>required</strong></mat-error>\n    </mat-form-field>\n    <p></p>\n    <button mat-raised-button style=\"width: 20%; background-color: firebrick;\" (click)=generatePunch(g_date.value,g_start.value,g_end.value)>PUNCH</button>\n    <mat-error>{{generateShiftRes}}</mat-error>\n</mat-card>\n\n<p></p>\n<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center\">Your Shift Status</mat-card-title><p></p>\n    <mat-card-title style=\"text-align: center\">{{shiftStatus}}</mat-card-title>\n</mat-card>"
 
 /***/ }),
 
@@ -49,9 +49,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 /* harmony import */ var _shifts_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shifts.service */ "./src/app/shifts.service.ts");
+/* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../state.service */ "./src/app/state.service.ts");
 
 
 var dateFormat = __webpack_require__(/*! dateformat */ "./node_modules/dateformat/lib/dateformat.js");
+
 
 
 var MyErrorStateMatcher = /** @class */ (function () {
@@ -64,8 +66,9 @@ var MyErrorStateMatcher = /** @class */ (function () {
 }());
 
 var AddShiftComponent = /** @class */ (function () {
-    function AddShiftComponent(addShiftService) {
+    function AddShiftComponent(addShiftService, stateService) {
         this.addShiftService = addShiftService;
+        this.stateService = stateService;
         this.dateFormControl = new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"]('', [
             _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required,
         ]);
@@ -87,6 +90,7 @@ var AddShiftComponent = /** @class */ (function () {
             this.punchShiftRes = 'PUNCH SUCCESS: ' + autoShift;
             this.punchShiftTrue = true;
             this.punchShiftFalse = false;
+            this.stateService.setState(!this.stateStatus);
             return;
         }
         this.punchShiftRes = 'Punch FAILED, TRY AGAIN';
@@ -100,14 +104,24 @@ var AddShiftComponent = /** @class */ (function () {
         }
         this.generateShiftRes = '';
     };
+    AddShiftComponent.prototype.updtateStateStatus = function () {
+        if (this.stateStatus === true) {
+            this.shiftStatus = 'On Shift';
+        }
+        else {
+            this.shiftStatus = 'Off Shift';
+        }
+    };
     AddShiftComponent.prototype.ngOnInit = function () {
+        this.stateStatus = this.stateService.getState();
+        this.updtateStateStatus();
     };
     AddShiftComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-add-shift',
             template: __webpack_require__(/*! ./add-shift.component.html */ "./src/app/add-shift/add-shift.component.html")
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_shifts_service__WEBPACK_IMPORTED_MODULE_3__["ShiftsService"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_shifts_service__WEBPACK_IMPORTED_MODULE_3__["ShiftsService"], _state_service__WEBPACK_IMPORTED_MODULE_4__["StateService"]])
     ], AddShiftComponent);
     return AddShiftComponent;
 }());
@@ -462,6 +476,57 @@ var ShiftsService = /** @class */ (function () {
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
     ], ShiftsService);
     return ShiftsService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/state.service.ts":
+/*!**********************************!*\
+  !*** ./src/app/state.service.ts ***!
+  \**********************************/
+/*! exports provided: StateService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StateService", function() { return StateService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+window.require = window.require || {};
+var StateService = /** @class */ (function () {
+    function StateService() {
+        this.ipc = void 0;
+        if (window.require) {
+            try {
+                this.ipc = window.require('electron').ipcRenderer;
+            }
+            catch (e) {
+                throw e;
+            }
+        }
+        else {
+            console.warn('Electron\'s IPC was not loaded');
+        }
+    }
+    StateService.prototype.getState = function () {
+        this.state = this.ipc.sendSync('getState');
+        return this.state;
+    };
+    StateService.prototype.setState = function (state) {
+        console.log(state);
+        this.state = this.ipc.sendSync('setState', state);
+    };
+    StateService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+            providedIn: 'root'
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], StateService);
+    return StateService;
 }());
 
 

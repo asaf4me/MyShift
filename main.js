@@ -20,7 +20,7 @@ function createWindow() {
     // );
     
     // The following is optional and will open the DevTools:
-    // win.webContents.openDevTools()
+    win.webContents.openDevTools();
     win.loadURL('http://localhost:4200');
     
     win.on("closed", () => {

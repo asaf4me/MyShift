@@ -9,8 +9,10 @@ window.require = window.require || {};
 @Injectable({
   providedIn: 'root'
 })
+
 export class StateService {
   private ipc: IpcRenderer | undefined = void 0;
+  private state: boolean;
 
   constructor() {
     if (window.require) {
@@ -23,4 +25,15 @@ export class StateService {
       console.warn('Electron\'s IPC was not loaded');
     }
   }
+
+  public getState(): boolean {
+    this.state = this.ipc.sendSync('getState');
+    return this.state;
+  }
+
+  public setState(state) {
+    console.log(state);
+    this.state = this.ipc.sendSync('setState', state);
+  }
+
 }
