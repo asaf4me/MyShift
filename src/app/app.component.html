@@ -1,0 +1,40 @@
+<mat-toolbar class="main-toolbar" style="padding: 5px">
+    <mat-toolbar-row>
+        <div class="example-sidenav-content">
+            <button type="button" class="main-menu-button" mat-raised-button (click)="drawer.toggle()" style="background-color:brown">
+                Toggle Main Menu
+            </button>
+            <span style="left:45%; position: absolute">My Shifts</span>
+        </div>
+    </mat-toolbar-row>
+</mat-toolbar>
+<mat-drawer-container class="example-container" autosize>
+    <mat-drawer #drawer class="example-sidenav" mode="side">
+        <button (click)="toggleComponent(0)" mat-raised-button style="width: 100%; background-color: peru">
+            Home
+        </button>
+        <p></p>
+        <button (click)="toggleComponent(1)" mat-raised-button style="width: 100%; background-color: peru">
+            Add Shift
+        </button>
+        <p></p>
+        <button (click)="toggleComponent(2)" mat-raised-button style="width: 100%; background-color: peru">
+            Edit Shifts
+        </button>
+        <p></p>
+        <button (click)="toggleComponent(3)" mat-raised-button style="width: 100%; background-color: peru">
+            Generate Report
+        </button>
+        <p></p>
+        <button (click)="toggleComponent(4)" mat-raised-button style="width: 100%; background-color: peru">
+            Statitstics
+        </button>
+    </mat-drawer>
+    <mat-drawer-container class="example-container-main-window" autosize>
+        <app-main-window *ngIf="isMainWindow"></app-main-window>
+        <app-add-shift *ngIf="isAdd"></app-add-shift>
+        <app-eddit-shifts *ngIf="isEddit"></app-eddit-shifts>
+    </mat-drawer-container>
+</mat-drawer-container>
+
+<!-- <router-outlet></router-outlet> -->
