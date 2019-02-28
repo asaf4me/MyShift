@@ -466,8 +466,7 @@ var ShiftsService = /** @class */ (function () {
         }
     }
     ShiftsService.prototype.setShift = function (shift) {
-        this.ipc.send('setShift', shift);
-        return true;
+        return this.ipc.sendSync('setShift', shift);
     };
     ShiftsService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({

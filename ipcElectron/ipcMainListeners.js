@@ -9,9 +9,9 @@ module.exports = () => {
     ipcMain.on('setShift', (e, shift) => {
         var json = JSON.stringify(shift);
         fs.appendFile(dataPath, json, (err) => {
-            if (err) throw err;
+            if (err) e.returnValue = false;
         });
-        // Retrun to rendered proccess that everything is O.K
+        e.returnValue = true; // Retrun to rendered proccess that everything is O.K
     });
 
     ipcMain.on('getState', (e) => {
