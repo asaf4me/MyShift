@@ -24,6 +24,10 @@ export class ShiftsService {
     }
   }
 
+  public getShift(){ //Return the last shift in th json file
+    return this.ipc.sendSync('getShift');
+  }
+
   public getShifts(){
     return this.ipc.sendSync('getShifts');
   }

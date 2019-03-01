@@ -32,7 +32,6 @@ export class StateService {
   }
 
   public setState(state) {
-    console.log(state);
     this.state = this.ipc.sendSync('setState', state);
   }
 

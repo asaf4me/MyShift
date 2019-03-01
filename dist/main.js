@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center;\">Punch Now</mat-card-title>\n    <button mat-raised-button style=\"width: 50%; background-color: firebrick; left: 25%\" (click)=\"autoPunch()\">PUNCH</button>\n    <p></p>\n    <mat-error *ngIf=\"punchShiftTrue\" style=\"color:green;\">{{punchShiftRes}}</mat-error>\n    <mat-error *ngIf=\"punchShiftFalse\">{{punchShiftRes}}</mat-error>\n</mat-card>\n<p></p>\n<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center\">Generate Shift</mat-card-title>\n    <mat-form-field class=\"example-full-width\">\n        <input #g_date matInput [min]=\"minDate\" [max]=\"maxDate\" [matDatepicker]=\"picker\" placeholder=\"Choose a date\"\n            [formControl]=\"dateFormControl\" [errorStateMatcher]=\"matcherDate\" />\n        <mat-datepicker-toggle matSuffix [for]=\"picker\"></mat-datepicker-toggle>\n        <mat-datepicker #picker></mat-datepicker>\n        <mat-error *ngIf=\"dateFormControl.hasError('required')\">Date is <strong>required</strong></mat-error>\n    </mat-form-field>\n\n    <mat-form-field class=\"example-full-width\">\n        <input #g_start matInput placeholder=\"Choose the start time\" [formControl]=\"startTimeFormControl\"\n            [errorStateMatcher]=\"matcherSTime\" />\n        <mat-error *ngIf=\"startTimeFormControl.hasError('required')\">Start time is <strong>required</strong></mat-error>\n    </mat-form-field>:\n\n    <mat-form-field class=\"example-full-width\">\n        <input #g_end matInput placeholder=\"Choose the end time\" [formControl]=\"endTimeFormControl\" [errorStateMatcher]=\"matcherETime\" />\n        <mat-error *ngIf=\"endTimeFormControl.hasError('required')\">End time is <strong>required</strong></mat-error>\n    </mat-form-field>\n    <p></p>\n    <button mat-raised-button style=\"width: 20%; background-color: firebrick;\" (click)=generatePunch(g_date.value,g_start.value,g_end.value)>PUNCH</button>\n    <mat-error>{{generateShiftRes}}</mat-error>\n</mat-card>\n\n<p></p>\n<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center\">Your Shift Status</mat-card-title><p></p>\n    <mat-card-title style=\"text-align: center\">{{shiftStatus}}</mat-card-title>\n</mat-card>"
+module.exports = "<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center;\">Punch Now</mat-card-title>\n    <button mat-raised-button style=\"width: 50%; background-color: firebrick; left: 25%\" (click)=\"autoPunch()\">PUNCH</button>\n    <p></p>\n</mat-card>\n<p></p>\n<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center\">Generate Shift</mat-card-title>\n    <mat-form-field class=\"example-full-width\">\n        <input #g_date matInput [min]=\"minDate\" [max]=\"maxDate\" [matDatepicker]=\"picker\" placeholder=\"Choose a date\"\n            [formControl]=\"dateFormControl\" [errorStateMatcher]=\"matcherDate\" />\n        <mat-datepicker-toggle matSuffix [for]=\"picker\"></mat-datepicker-toggle>\n        <mat-datepicker #picker></mat-datepicker>\n        <mat-error *ngIf=\"dateFormControl.hasError('required')\">Date is <strong>required</strong></mat-error>\n    </mat-form-field>\n\n    <mat-form-field class=\"example-full-width\">\n        <input #g_start matInput placeholder=\"Choose the start time\" [formControl]=\"startTimeFormControl\"\n            [errorStateMatcher]=\"matcherSTime\" />\n        <mat-error *ngIf=\"startTimeFormControl.hasError('required')\">Start time is <strong>required</strong></mat-error>\n    </mat-form-field>:\n\n    <mat-form-field class=\"example-full-width\">\n        <input #g_end matInput placeholder=\"Choose the end time\" [formControl]=\"endTimeFormControl\" [errorStateMatcher]=\"matcherETime\" />\n        <mat-error *ngIf=\"endTimeFormControl.hasError('required')\">End time is <strong>required</strong></mat-error>\n    </mat-form-field>\n    <p></p>\n    <button mat-raised-button style=\"width: 20%; background-color: firebrick;\" (click)=generatePunch(g_date.value,g_start.value,g_end.value)>PUNCH</button>\n    <mat-error>{{generateShiftRes}}</mat-error>\n</mat-card>\n\n<p></p>\n<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center\">Your Shift Status</mat-card-title><p></p>\n    <mat-card-title style=\"text-align: center\">{{shiftStatus}}</mat-card-title>\n</mat-card>"
 
 /***/ }),
 
@@ -52,7 +52,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../state.service */ "./src/app/state.service.ts");
 
 
-var dateFormat = __webpack_require__(/*! dateformat */ "./node_modules/dateformat/lib/dateformat.js");
 
 
 
@@ -84,18 +83,18 @@ var AddShiftComponent = /** @class */ (function () {
     }
     AddShiftComponent.prototype.autoPunch = function () {
         var now = new Date();
-        var autoShift = dateFormat(now, 'dddd mmmm yyyy h:MM TT');
-        var res = this.addShiftService.setShift({ autoShift: autoShift }); // fetch the data to electron using ipcRenderer
-        if (res === true) {
-            this.punchShiftRes = 'PUNCH SUCCESS: ' + autoShift;
-            this.punchShiftTrue = true;
-            this.punchShiftFalse = false;
-            this.stateService.setState(!this.stateStatus);
-            return;
+        this.onShift = this.stateService.getState();
+        if (this.onShift === false) {
+            this.newShift = this.createShift(now);
+            this.addShiftService.setShift(this.newShift);
+            this.stateService.setState(!this.onShift);
         }
-        this.punchShiftRes = 'Punch FAILED, TRY AGAIN';
-        this.punchShiftFalse = true;
-        this.punchShiftTrue = false;
+        else {
+            this.newShift = this.updateShift(now);
+            this.addShiftService.setShift(this.newShift);
+            this.stateService.setState(!this.onShift);
+        }
+        console.log(this.newShift);
     };
     AddShiftComponent.prototype.generatePunch = function (date, start, end) {
         if (date === '' || start === '' || end === '') {
@@ -105,15 +104,26 @@ var AddShiftComponent = /** @class */ (function () {
         this.generateShiftRes = '';
     };
     AddShiftComponent.prototype.updtateStateStatus = function () {
-        if (this.stateStatus === true) {
+        if (this.onShift === true) {
             this.shiftStatus = 'On Shift';
         }
         else {
             this.shiftStatus = 'Off Shift';
         }
     };
+    AddShiftComponent.prototype.createShift = function (shift) {
+        var date = shift.getDate() + "/" + shift.getMonth() + "/" + shift.getFullYear();
+        var time = shift.getHours() + ":" + shift.getMinutes();
+        var newShift = { date: date, startTime: time, endTime: '0' };
+        return newShift;
+    };
+    AddShiftComponent.prototype.updateShift = function (now) {
+        var editedShift = this.addShiftService.getShift();
+        editedShift.endTime = now.getHours() + ":" + now.getMinutes();
+        return editedShift;
+    };
     AddShiftComponent.prototype.ngOnInit = function () {
-        this.stateStatus = this.stateService.getState();
+        this.onShift = this.stateService.getState();
         this.updtateStateStatus();
     };
     AddShiftComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -358,6 +368,17 @@ var AppModule = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/eddit-shifts/eddit-shifts.component.html":
+/*!**********************************************************!*\
+  !*** ./src/app/eddit-shifts/eddit-shifts.component.html ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<table style=\"width: 100%\" mat-table [dataSource]=\"dataSource\" class=\"mat-elevation-z8\">\n\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"position\">\n        <th mat-header-cell *matHeaderCellDef> No. </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.position}} </td>\n    </ng-container>\n\n    <!-- Day Column -->\n    <ng-container matColumnDef=\"day\">\n        <th mat-header-cell *matHeaderCellDef> Day </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.day}} </td>\n    </ng-container>\n\n    <!-- Start Time Column -->\n    <ng-container matColumnDef=\"startTime\">\n        <th mat-header-cell *matHeaderCellDef> Start time </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.startTime}} </td>\n    </ng-container>\n\n    <!-- End Time Column -->\n    <ng-container matColumnDef=\"endTime\">\n        <th mat-header-cell *matHeaderCellDef> End time </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.endTime}} </td>\n    </ng-container>\n\n    <!-- Action Column -->\n    <ng-container matColumnDef=\"action\">\n        <th mat-header-cell *matHeaderCellDef> Action </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.action}} </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n</table>"
+
+/***/ }),
+
 /***/ "./src/app/eddit-shifts/eddit-shifts.component.ts":
 /*!********************************************************!*\
   !*** ./src/app/eddit-shifts/eddit-shifts.component.ts ***!
@@ -370,19 +391,34 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EdditShiftsComponent", function() { return EdditShiftsComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _shifts_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shifts.service */ "./src/app/shifts.service.ts");
+
 
 
 var EdditShiftsComponent = /** @class */ (function () {
-    function EdditShiftsComponent() {
+    function EdditShiftsComponent(shiftService) {
+        this.shiftService = shiftService;
+        this.displayedColumns = ['position', 'day', 'startTime', 'endTime', 'action'];
     }
     EdditShiftsComponent.prototype.ngOnInit = function () {
+        this.bulidTable();
+    };
+    EdditShiftsComponent.prototype.bulidTable = function () {
+        var temp;
+        this.shifts = this.shiftService.getShifts();
+        console.log(this.shifts);
+        this.dataSource = new Array();
+        // this.shifts.forEach((element, index) => {
+        // 	temp = { position: ++index, day: element, startTime:'0' , endTime: '0' , action: '0' };
+        // 	this.dataSource.push(temp);
+        // });
     };
     EdditShiftsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-eddit-shifts',
-            template: "\n    <p>\n      edit-shifts works!\n    </p>\n  "
+            template: __webpack_require__(/*! ./eddit-shifts.component.html */ "./src/app/eddit-shifts/eddit-shifts.component.html")
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_shifts_service__WEBPACK_IMPORTED_MODULE_2__["ShiftsService"]])
     ], EdditShiftsComponent);
     return EdditShiftsComponent;
 }());
@@ -465,6 +501,12 @@ var ShiftsService = /** @class */ (function () {
             console.warn('Electron\'s IPC was not loaded');
         }
     }
+    ShiftsService.prototype.getShift = function () {
+        return this.ipc.sendSync('getShift');
+    };
+    ShiftsService.prototype.getShifts = function () {
+        return this.ipc.sendSync('getShifts');
+    };
     ShiftsService.prototype.setShift = function (shift) {
         return this.ipc.sendSync('setShift', shift);
     };
@@ -516,7 +558,6 @@ var StateService = /** @class */ (function () {
         return this.state;
     };
     StateService.prototype.setState = function (state) {
-        console.log(state);
         this.state = this.ipc.sendSync('setState', state);
     };
     StateService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([

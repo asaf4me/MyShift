@@ -2,14 +2,26 @@
 
     <!-- Position Column -->
     <ng-container matColumnDef="position">
-        <th mat-header-cell *matHeaderCellDef> No. </th>
+        <th mat-header-cell *matHeaderCellDef> Shift No. </th>
         <td mat-cell *matCellDef="let element"> {{element.position}} </td>
     </ng-container>
 
-    <!-- Shift Column -->
-    <ng-container matColumnDef="shift">
-        <th mat-header-cell *matHeaderCellDef> Shift </th>
-        <td mat-cell *matCellDef="let element"> {{element.shift}} </td>
+    <!-- Day Column -->
+    <ng-container matColumnDef="day">
+        <th mat-header-cell *matHeaderCellDef> Day </th>
+        <td mat-cell *matCellDef="let element"> {{element.day}} </td>
+    </ng-container>
+
+    <!-- Start Time Column -->
+    <ng-container matColumnDef="startTime">
+        <th mat-header-cell *matHeaderCellDef> Start time </th>
+        <td mat-cell *matCellDef="let element"> {{element.startTime}} </td>
+    </ng-container>
+
+    <!-- End Time Column -->
+    <ng-container matColumnDef="endTime">
+        <th mat-header-cell *matHeaderCellDef> End time </th>
+        <td mat-cell *matCellDef="let element"> {{element.endTime}} </td>
     </ng-container>
 
     <!-- Action Column -->

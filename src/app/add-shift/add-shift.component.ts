@@ -1,16 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-declare function require(name: string);
-const dateFormat = require('dateformat');
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { ShiftsService } from '../shifts.service';
 import { StateService } from '../state.service';
 
-
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     return !!(control && control.invalid && (control.dirty || control.touched));
   }
+}
+
+export interface NewShift {
+  date: string;
+  startTime: string;
+  endTime: string;
 }
 
 @Component({
@@ -21,12 +24,9 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class AddShiftComponent implements OnInit {
 
   public generateShiftRes: string;
-  public punchShiftRes: string;
-  public punchShiftTrue: boolean;
-  public punchShiftFalse: boolean;
-  public onShiftStatus: boolean;
   public shiftStatus: string;
-  public stateStatus: boolean;
+  public onShift: boolean;
+  private newShift: NewShift;
 
   constructor(private addShiftService: ShiftsService, private stateService: StateService) { }
 
@@ -44,19 +44,18 @@ export class AddShiftComponent implements OnInit {
   matcherETime = new MyErrorStateMatcher();
 
   autoPunch() {
-    const now = new Date();
-    const autoShift = dateFormat(now, 'dddd mmmm yyyy h:MM TT\n');
-    const res = this.addShiftService.setShift(autoShift); // fetch the data to electron using ipcRenderer
-    if (res === true) {
-      this.punchShiftRes = 'PUNCH SUCCESS: ' + autoShift;
-      this.punchShiftTrue = true;
-      this.punchShiftFalse = false;
-      this.stateService.setState(!this.stateStatus);
-      return;
+    let now = new Date();
+    this.onShift = this.stateService.getState();
+    if(this.onShift === false) {
+      this.newShift = this.createShift(now);
+      this.addShiftService.setShift(this.newShift);
+      this.stateService.setState(!this.onShift);
+    } else {
+      this.newShift = this.updateShift(now);
+      this.addShiftService.setShift(this.newShift);
+      this.stateService.setState(!this.onShift);
     }
-    this.punchShiftRes = 'Punch FAILED, TRY AGAIN';
-    this.punchShiftFalse = true;
-    this.punchShiftTrue = false;
+    console.log(this.newShift);
   }
 
   generatePunch(date: string, start: string, end: string) {
@@ -68,15 +67,29 @@ export class AddShiftComponent implements OnInit {
   }
 
   updtateStateStatus() {
-    if (this.stateStatus === true) {
+    if (this.onShift === true) {
       this.shiftStatus = 'On Shift';
     } else {
       this.shiftStatus = 'Off Shift';
     }
   }
 
+  createShift(shift: Date): { date: string; startTime: string; endTime: string }{
+    let date = shift.getDate() + "/" + shift.getMonth() + "/" + shift.getFullYear();
+    var time = shift.getHours() + ":" + shift.getMinutes();
+    let newShift = { date: date, startTime: time , endTime: '0'};
+    return newShift;
+  }
+
+  updateShift(now: Date): { date: string; startTime: string; endTime: string } {
+    let editedShift = this.addShiftService.getShift();
+    editedShift.endTime = now.getHours() + ":" + now.getMinutes();
+    return editedShift;
+  }
+
+
   ngOnInit() {
-    this.stateStatus = this.stateService.getState();
+    this.onShift = this.stateService.getState();
     this.updtateStateStatus();
   }
 
