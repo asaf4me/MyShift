@@ -24,6 +24,10 @@ export class ShiftsService {
     }
   }
 
+  public getShifts(){
+    return this.ipc.sendSync('getShifts');
+  }
+
   public setShift(shift): any { // sending the data back to electron
     return this.ipc.sendSync('setShift', shift);
   }

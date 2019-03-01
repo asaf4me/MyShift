@@ -45,8 +45,8 @@ export class AddShiftComponent implements OnInit {
 
   autoPunch() {
     const now = new Date();
-    const autoShift = dateFormat(now, 'dddd mmmm yyyy h:MM TT');
-    const res = this.addShiftService.setShift({autoShift}); // fetch the data to electron using ipcRenderer
+    const autoShift = dateFormat(now, 'dddd mmmm yyyy h:MM TT\n');
+    const res = this.addShiftService.setShift(autoShift); // fetch the data to electron using ipcRenderer
     if (res === true) {
       this.punchShiftRes = 'PUNCH SUCCESS: ' + autoShift;
       this.punchShiftTrue = true;

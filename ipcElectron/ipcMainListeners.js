@@ -3,12 +3,11 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = () => {
-    const dataPath = path.join(__dirname, `/data/userShift.json`);
+    const dataPath = path.join(__dirname, `/data/userShift`);
     const statePath = path.join(__dirname, `/data/userState.json`);
 
     ipcMain.on('setShift', (e, shift) => {
-        var json = JSON.stringify(shift);
-        fs.appendFile(dataPath, json, (err) => {
+        fs.appendFile(dataPath, shift, (err) => {
             if (err) e.returnValue = false;
         });
         e.returnValue = true; // Retrun to rendered proccess that everything is O.K
@@ -31,6 +30,14 @@ module.exports = () => {
         setState(state);
         e.returnValue = true;
     })
+
+    ipcMain.on('getShifts',(e) => {
+        var shifts = fs.readFileSync(dataPath, 'utf8');
+        if(shifts === "") {
+            e.returnValue = false;
+        }
+        e.returnValue = shifts;
+    });
 
     function setState(state) {
         var jsonState = JSON.stringify(state);
