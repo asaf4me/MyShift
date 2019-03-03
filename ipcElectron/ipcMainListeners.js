@@ -34,9 +34,35 @@ module.exports = () => {
         e.returnValue = shifts;
     });
 
+    ipcMain.on('removeOne', (e, position) => {
+        previousData.splice(--position,1);
+        var json = JSON.stringify(previousData, null, 4);
+        try {
+            fs.writeFileSync(dataPath, json, 'utf8');
+            e.returnValue = true; // Retrun to rendered proccess that everything is O.K
+        }
+        catch (err) {
+            console.log(err);
+            e.returnValue = false;
+        }
+    });
+
+    ipcMain.on('removeAll', (e) => {
+        var json = JSON.stringify([], null, 4);
+        previousData = [];
+        try {
+            fs.writeFileSync(dataPath, json, 'utf8');
+            e.returnValue = true; // Retrun to rendered proccess that everything is O.K
+        }
+        catch (err) {
+            console.log(err);
+            e.returnValue = false;
+        }
+    })
+
     ipcMain.on('getState', (e) => {
         var state = fs.readFileSync(statePath,'utf8');
-        if(state === "") {
+        if(state === "" || previousData.length === 0) {
             state = false; // First initilize
             setState(state);
         }
@@ -50,7 +76,7 @@ module.exports = () => {
     ipcMain.on('setState', (e,state) => {
         setState(state);
         e.returnValue = true;
-    })
+    });
 
     function setState(state) {
         var jsonState = JSON.stringify(state);

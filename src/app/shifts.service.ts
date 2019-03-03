@@ -35,4 +35,17 @@ export class ShiftsService {
   public setShift(shift): any { // sending the data back to electron
     return this.ipc.sendSync('setShift', shift);
   }
+
+  public removeAll(){
+    return this.ipc.sendSync('removeAll');
+  }
+
+  public removeOne(position: number){
+    return this.ipc.sendSync('removeOne', position);
+  }
+
+  public editOne(date: string, start: string, end: string){
+
+  }
+
 }

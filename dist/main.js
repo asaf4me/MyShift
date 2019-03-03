@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center;\">Punch Now</mat-card-title>\n    <button mat-raised-button style=\"width: 50%; background-color: firebrick; left: 25%\" (click)=\"autoPunch()\">PUNCH</button>\n    <p></p>\n</mat-card>\n<p></p>\n<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center\">Generate Shift</mat-card-title>\n    <mat-form-field class=\"example-full-width\">\n        <input #g_date matInput [min]=\"minDate\" [max]=\"maxDate\" [matDatepicker]=\"picker\" placeholder=\"Choose a date\"\n            [formControl]=\"dateFormControl\" [errorStateMatcher]=\"matcherDate\" />\n        <mat-datepicker-toggle matSuffix [for]=\"picker\"></mat-datepicker-toggle>\n        <mat-datepicker #picker></mat-datepicker>\n        <mat-error *ngIf=\"dateFormControl.hasError('required')\">Date is <strong>required</strong></mat-error>\n    </mat-form-field>\n\n    <mat-form-field class=\"example-full-width\">\n        <input #g_start matInput placeholder=\"Choose the start time\" [formControl]=\"startTimeFormControl\"\n            [errorStateMatcher]=\"matcherSTime\" />\n        <mat-error *ngIf=\"startTimeFormControl.hasError('required')\">Start time is <strong>required</strong></mat-error>\n    </mat-form-field>:\n\n    <mat-form-field class=\"example-full-width\">\n        <input #g_end matInput placeholder=\"Choose the end time\" [formControl]=\"endTimeFormControl\" [errorStateMatcher]=\"matcherETime\" />\n        <mat-error *ngIf=\"endTimeFormControl.hasError('required')\">End time is <strong>required</strong></mat-error>\n    </mat-form-field>\n    <p></p>\n    <button mat-raised-button style=\"width: 20%; background-color: firebrick;\" (click)=generatePunch(g_date.value,g_start.value,g_end.value)>PUNCH</button>\n    <mat-error>{{generateShiftRes}}</mat-error>\n</mat-card>\n\n<p></p>\n<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center\">Your Shift Status</mat-card-title><p></p>\n    <mat-card-title style=\"text-align: center\">{{shiftStatus}}</mat-card-title>\n</mat-card>"
+module.exports = "<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center;\">Punch Now</mat-card-title>\n    <button mat-raised-button style=\"width: 50%; background-color: firebrick; left: 25%\" (click)=\"autoPunch()\">Punch</button>\n    <p></p>\n    <mat-progress-bar mode=\"indeterminate\" *ngIf=\"progressBar\"></mat-progress-bar>\n</mat-card>\n<p></p>\n<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center\">Generate Shift</mat-card-title>\n    <mat-form-field class=\"example-full-width\">\n        <input #g_date matInput [min]=\"minDate\" [max]=\"maxDate\" [matDatepicker]=\"picker\" placeholder=\"Choose a date\"\n            [formControl]=\"dateFormControl\" [errorStateMatcher]=\"matcherDate\" />\n        <mat-datepicker-toggle matSuffix [for]=\"picker\"></mat-datepicker-toggle>\n        <mat-datepicker #picker></mat-datepicker>\n        <mat-error *ngIf=\"dateFormControl.hasError('required')\">Date is <strong>required</strong></mat-error>\n    </mat-form-field>\n\n    <mat-form-field class=\"example-full-width\">\n        <input #g_start matInput placeholder=\"Choose the start time\" [formControl]=\"startTimeFormControl\"\n            [errorStateMatcher]=\"matcherSTime\" />\n        <mat-error *ngIf=\"startTimeFormControl.hasError('required')\">Start time is <strong>required</strong></mat-error>\n    </mat-form-field>:\n\n    <mat-form-field class=\"example-full-width\">\n        <input #g_end matInput placeholder=\"Choose the end time\" [formControl]=\"endTimeFormControl\" [errorStateMatcher]=\"matcherETime\" />\n        <mat-error *ngIf=\"endTimeFormControl.hasError('required')\">End time is <strong>required</strong></mat-error>\n    </mat-form-field>\n    <p></p>\n    <button mat-raised-button style=\"width: 20%; background-color: firebrick;\" (click)=generatePunch(g_date.value,g_start.value,g_end.value)>Punch</button>\n    <mat-error>{{generateShiftRes}}</mat-error>\n</mat-card>\n\n<p></p>\n<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center\">Shift Status</mat-card-title>\n    <p></p>\n    <mat-card-title style=\"text-align: center; color: orange; font-size: 50px;\">{{shiftStatus}}</mat-card-title>\n</mat-card>"
 
 /***/ }),
 
@@ -50,6 +50,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 /* harmony import */ var _shifts_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shifts.service */ "./src/app/shifts.service.ts");
 /* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../state.service */ "./src/app/state.service.ts");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+
 
 
 
@@ -65,9 +67,10 @@ var MyErrorStateMatcher = /** @class */ (function () {
 }());
 
 var AddShiftComponent = /** @class */ (function () {
-    function AddShiftComponent(addShiftService, stateService) {
+    function AddShiftComponent(addShiftService, stateService, snackBar) {
         this.addShiftService = addShiftService;
         this.stateService = stateService;
+        this.snackBar = snackBar;
         this.dateFormControl = new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"]('', [
             _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required,
         ]);
@@ -86,15 +89,28 @@ var AddShiftComponent = /** @class */ (function () {
         this.onShift = this.stateService.getState();
         if (this.onShift === false) {
             this.newShift = this.createShift(now);
-            this.addShiftService.setShift(this.newShift);
+            var res = this.addShiftService.setShift(this.newShift);
+            if (res === false) {
+                this.punchSuccess("Punch failed, try again", "");
+                return;
+            }
+            this.punchSuccess("Punch success", "");
             this.stateService.setState(!this.onShift);
+            this.onShift = !this.onShift;
+            this.updtateStateStatus();
         }
         else {
             this.newShift = this.updateShift(now);
-            this.addShiftService.setShift(this.newShift);
+            var res = this.addShiftService.setShift(this.newShift);
+            if (res === false) {
+                this.punchSuccess("Punch failed, try again", "");
+                return;
+            }
+            this.punchSuccess("Punch success", "");
             this.stateService.setState(!this.onShift);
+            this.onShift = !this.onShift;
+            this.updtateStateStatus();
         }
-        console.log(this.newShift);
     };
     AddShiftComponent.prototype.generatePunch = function (date, start, end) {
         if (date === '' || start === '' || end === '') {
@@ -102,25 +118,32 @@ var AddShiftComponent = /** @class */ (function () {
             return;
         }
         this.generateShiftRes = '';
+        this.punchSuccess("Punch success", "");
     };
     AddShiftComponent.prototype.updtateStateStatus = function () {
         if (this.onShift === true) {
-            this.shiftStatus = 'On Shift';
+            this.shiftStatus = 'On shift';
         }
         else {
-            this.shiftStatus = 'Off Shift';
+            this.shiftStatus = 'Off shift';
         }
     };
     AddShiftComponent.prototype.createShift = function (shift) {
         var date = shift.getDate() + "/" + shift.getMonth() + "/" + shift.getFullYear();
-        var time = shift.getHours() + ":" + shift.getMinutes();
+        var time = shift.getHours() + ":" + (shift.getMinutes() < 10 ? '0' : '') + shift.getMinutes();
         var newShift = { date: date, startTime: time, endTime: '0' };
         return newShift;
     };
     AddShiftComponent.prototype.updateShift = function (now) {
         var editedShift = this.addShiftService.getShift();
-        editedShift.endTime = now.getHours() + ":" + now.getMinutes();
+        editedShift.endTime = now.getHours() + ":" + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
         return editedShift;
+    };
+    AddShiftComponent.prototype.punchSuccess = function (message, action) {
+        this.snackBar.open(message, action, {
+            duration: 1000,
+            verticalPosition: 'bottom',
+        });
     };
     AddShiftComponent.prototype.ngOnInit = function () {
         this.onShift = this.stateService.getState();
@@ -131,7 +154,7 @@ var AddShiftComponent = /** @class */ (function () {
             selector: 'app-add-shift',
             template: __webpack_require__(/*! ./add-shift.component.html */ "./src/app/add-shift/add-shift.component.html")
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_shifts_service__WEBPACK_IMPORTED_MODULE_3__["ShiftsService"], _state_service__WEBPACK_IMPORTED_MODULE_4__["StateService"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_shifts_service__WEBPACK_IMPORTED_MODULE_3__["ShiftsService"], _state_service__WEBPACK_IMPORTED_MODULE_4__["StateService"], _angular_material__WEBPACK_IMPORTED_MODULE_5__["MatSnackBar"]])
     ], AddShiftComponent);
     return AddShiftComponent;
 }());
@@ -375,7 +398,7 @@ var AppModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<table style=\"width: 100%\" mat-table [dataSource]=\"dataSource\" class=\"mat-elevation-z8\">\n\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"position\">\n        <th mat-header-cell *matHeaderCellDef> No. </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.position}} </td>\n    </ng-container>\n\n    <!-- Day Column -->\n    <ng-container matColumnDef=\"day\">\n        <th mat-header-cell *matHeaderCellDef> Day </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.day}} </td>\n    </ng-container>\n\n    <!-- Start Time Column -->\n    <ng-container matColumnDef=\"startTime\">\n        <th mat-header-cell *matHeaderCellDef> Start time </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.startTime}} </td>\n    </ng-container>\n\n    <!-- End Time Column -->\n    <ng-container matColumnDef=\"endTime\">\n        <th mat-header-cell *matHeaderCellDef> End time </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.endTime}} </td>\n    </ng-container>\n\n    <!-- Action Column -->\n    <ng-container matColumnDef=\"action\">\n        <th mat-header-cell *matHeaderCellDef> Action </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.action}} </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n</table>"
+module.exports = "<button mat-raised-button style=\"width: 30%; background-color: firebrick;\" (click)=\"removeAll()\">REMOVE ALL</button>\n<p></p>\n<table style=\"width: 100%\" mat-table [dataSource]=\"dataSource\" class=\"mat-elevation-z8\">\n\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"position\">\n        <th mat-header-cell *matHeaderCellDef> Shift No. </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.position}} </td>\n    </ng-container>\n\n    <!-- Day Column -->\n    <ng-container matColumnDef=\"day\">\n        <th mat-header-cell *matHeaderCellDef> Day </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.day}} </td>\n    </ng-container>\n\n    <!-- Start Time Column -->\n    <ng-container matColumnDef=\"startTime\">\n        <th mat-header-cell *matHeaderCellDef> Start time </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.startTime}} </td>\n    </ng-container>\n\n    <!-- End Time Column -->\n    <ng-container matColumnDef=\"endTime\">\n        <th mat-header-cell *matHeaderCellDef> End time </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.endTime}} </td>\n    </ng-container>\n\n    <!-- Action Column -->\n    <ng-container matColumnDef=\"action\">\n        <th mat-header-cell *matHeaderCellDef style=\"text-align: center\"> Action </th>\n        <td mat-cell *matCellDef=\"let element\" style=\"padding: 10px\">\n            <button mat-raised-button style=\"left: 17%; color: darkgoldenrod\" (click)=\"editOne(element.day, element.startTime, element.endTime)\">EDIT</button>\n            <button mat-raised-button style=\"left: 20%; color: darkgoldenrod\" (click)=\"removeOne(element.position)\">REMOVE</button>\n        </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n</table>"
 
 /***/ }),
 
@@ -392,33 +415,52 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _shifts_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shifts.service */ "./src/app/shifts.service.ts");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+
 
 
 
 var EdditShiftsComponent = /** @class */ (function () {
-    function EdditShiftsComponent(shiftService) {
+    function EdditShiftsComponent(shiftService, dialog) {
         this.shiftService = shiftService;
+        this.dialog = dialog;
         this.displayedColumns = ['position', 'day', 'startTime', 'endTime', 'action'];
     }
     EdditShiftsComponent.prototype.ngOnInit = function () {
         this.bulidTable();
     };
     EdditShiftsComponent.prototype.bulidTable = function () {
+        var _this = this;
         var temp;
         this.shifts = this.shiftService.getShifts();
-        console.log(this.shifts);
         this.dataSource = new Array();
-        // this.shifts.forEach((element, index) => {
-        // 	temp = { position: ++index, day: element, startTime:'0' , endTime: '0' , action: '0' };
-        // 	this.dataSource.push(temp);
-        // });
+        if (this.shifts.length > 0) {
+            this.shifts.forEach(function (element, index) {
+                temp = { position: ++index, day: element.date, startTime: element.startTime, endTime: element.endTime, action: '0' };
+                _this.dataSource.push(temp);
+            });
+        }
+    };
+    EdditShiftsComponent.prototype.removeAll = function () {
+        var res = this.shiftService.removeAll();
+        if (res === true) {
+            this.bulidTable();
+        }
+    };
+    EdditShiftsComponent.prototype.removeOne = function (position) {
+        var res = this.shiftService.removeOne(position);
+        if (res === true) {
+            this.bulidTable();
+        }
+    };
+    EdditShiftsComponent.prototype.editOne = function (date, start, end) {
     };
     EdditShiftsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-eddit-shifts',
             template: __webpack_require__(/*! ./eddit-shifts.component.html */ "./src/app/eddit-shifts/eddit-shifts.component.html")
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_shifts_service__WEBPACK_IMPORTED_MODULE_2__["ShiftsService"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_shifts_service__WEBPACK_IMPORTED_MODULE_2__["ShiftsService"], _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatDialog"]])
     ], EdditShiftsComponent);
     return EdditShiftsComponent;
 }());
@@ -509,6 +551,14 @@ var ShiftsService = /** @class */ (function () {
     };
     ShiftsService.prototype.setShift = function (shift) {
         return this.ipc.sendSync('setShift', shift);
+    };
+    ShiftsService.prototype.removeAll = function () {
+        return this.ipc.sendSync('removeAll');
+    };
+    ShiftsService.prototype.removeOne = function (position) {
+        return this.ipc.sendSync('removeOne', position);
+    };
+    ShiftsService.prototype.editOne = function (date, start, end) {
     };
     ShiftsService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
