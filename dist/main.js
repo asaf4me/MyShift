@@ -415,15 +415,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _shifts_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shifts.service */ "./src/app/shifts.service.ts");
-/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
-
 
 
 
 var EdditShiftsComponent = /** @class */ (function () {
-    function EdditShiftsComponent(shiftService, dialog) {
+    function EdditShiftsComponent(shiftService) {
         this.shiftService = shiftService;
-        this.dialog = dialog;
         this.displayedColumns = ['position', 'day', 'startTime', 'endTime', 'action'];
     }
     EdditShiftsComponent.prototype.ngOnInit = function () {
@@ -460,7 +457,7 @@ var EdditShiftsComponent = /** @class */ (function () {
             selector: 'app-eddit-shifts',
             template: __webpack_require__(/*! ./eddit-shifts.component.html */ "./src/app/eddit-shifts/eddit-shifts.component.html")
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_shifts_service__WEBPACK_IMPORTED_MODULE_2__["ShiftsService"], _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatDialog"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_shifts_service__WEBPACK_IMPORTED_MODULE_2__["ShiftsService"]])
     ], EdditShiftsComponent);
     return EdditShiftsComponent;
 }());
