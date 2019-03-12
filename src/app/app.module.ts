@@ -44,7 +44,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { EdditShiftsComponent } from './eddit-shifts/eddit-shifts.component';
+import { EdditShiftsComponent, EditOneShiftComponent } from './eddit-shifts/eddit-shifts.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +52,10 @@ import { EdditShiftsComponent } from './eddit-shifts/eddit-shifts.component';
     MainWindowComponent,
     AddShiftComponent,
     EdditShiftsComponent,
+    EditOneShiftComponent,
+  ],
+  entryComponents: [
+    EditOneShiftComponent,
   ],
   imports: [
     BrowserModule,

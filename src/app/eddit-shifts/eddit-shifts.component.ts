@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ShiftsService } from '../shifts.service';
-// import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 export interface PeriodicElement {
 	day: string;
@@ -17,13 +17,10 @@ export interface PeriodicElement {
 })
 export class EdditShiftsComponent implements OnInit {
 	private shifts: [];
-	public editRowId: any;
-	public edit: boolean;
-
 	displayedColumns: string[] = ['position', 'day', 'startTime', 'endTime', 'action'];
 	dataSource: PeriodicElement[];
 
-	constructor(private shiftService: ShiftsService) { }
+	constructor(private shiftService: ShiftsService, public dialog: MatDialog) { }
 
 	ngOnInit() {
 		this.bulidTable();
@@ -39,7 +36,6 @@ export class EdditShiftsComponent implements OnInit {
 				this.dataSource.push(temp);
 			});
 		}
-		this.edit = true;
 	}
 
 	public removeAll() {
@@ -56,18 +52,28 @@ export class EdditShiftsComponent implements OnInit {
 		}
 	}
 
-	public editOne(position: number) {
-		if (this.edit === true){
-			this.editRowId = position;
-			this.edit = false;
-		}else{
-			this.editRowId = -1 * position;
-			this.edit = true;
-		}
-
-	}
-
-	public done(){
+	public editOne(position: number, day: string, start: string, end: string) {
+		const dialogRef = this.dialog.open(EditOneShiftComponent, {
+			height: '200px',
+			width: '400px',
+			data:{
+				day: day,
+				start: start,
+				end: end
+			}
+		});
 	}
 }
 
+@Component({
+	selector: 'eddit-shift-dialog',
+	templateUrl: 'eddit-shift-dialog.html',
+})
+export class EditOneShiftComponent {
+	constructor(public dialogRef: MatDialogRef<EditOneShiftComponent>,
+		@Inject(MAT_DIALOG_DATA) public data: any){ }
+		
+	public done(position: number, day: string, start: string, end: string) {
+		this.dialogRef.close();
+	}
+}
