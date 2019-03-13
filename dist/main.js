@@ -586,12 +586,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GenerateReportComponent", function() { return GenerateReportComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _shifts_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shifts.service */ "./src/app/shifts.service.ts");
+
 
 
 var GenerateReportComponent = /** @class */ (function () {
-    function GenerateReportComponent() {
+    function GenerateReportComponent(shiftService) {
+        this.shiftService = shiftService;
     }
     GenerateReportComponent.prototype.ngOnInit = function () {
+        this.shifts = this.getData();
+        console.log(this.shifts);
+    };
+    GenerateReportComponent.prototype.getData = function () {
+        return this.shiftService.getShifts();
     };
     GenerateReportComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -599,7 +607,7 @@ var GenerateReportComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./generate-report.component.html */ "./src/app/generate-report/generate-report.component.html"),
             styles: [__webpack_require__(/*! ./generate-report.component.css */ "./src/app/generate-report/generate-report.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_shifts_service__WEBPACK_IMPORTED_MODULE_2__["ShiftsService"]])
     ], GenerateReportComponent);
     return GenerateReportComponent;
 }());
