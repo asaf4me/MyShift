@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center;\">Punch Now</mat-card-title>\n    <button mat-raised-button style=\"width: 50%; background-color: firebrick; left: 25%\" (click)=\"autoPunch()\">Punch</button>\n    <p></p>\n    <mat-progress-bar mode=\"indeterminate\" *ngIf=\"progressBar\"></mat-progress-bar>\n</mat-card>\n<p></p>\n<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center\">Generate Shift</mat-card-title>\n    <mat-form-field class=\"example-full-width\">\n        <input #g_date matInput [min]=\"minDate\" [max]=\"maxDate\" [matDatepicker]=\"picker\" placeholder=\"Choose a date\"\n            [formControl]=\"dateFormControl\" [errorStateMatcher]=\"matcherDate\" />\n        <mat-datepicker-toggle matSuffix [for]=\"picker\"></mat-datepicker-toggle>\n        <mat-datepicker #picker></mat-datepicker>\n        <mat-error *ngIf=\"dateFormControl.hasError('required')\">Date is <strong>required</strong></mat-error>\n    </mat-form-field>\n\n    <mat-form-field class=\"example-full-width\">\n        <input #g_start matInput placeholder=\"Choose the start time\" [formControl]=\"startTimeFormControl\"\n            [errorStateMatcher]=\"matcherSTime\" />\n        <mat-error *ngIf=\"startTimeFormControl.hasError('required')\">Start time is <strong>required</strong></mat-error>\n    </mat-form-field>:\n\n    <mat-form-field class=\"example-full-width\">\n        <input #g_end matInput placeholder=\"Choose the end time\" [formControl]=\"endTimeFormControl\" [errorStateMatcher]=\"matcherETime\" />\n        <mat-error *ngIf=\"endTimeFormControl.hasError('required')\">End time is <strong>required</strong></mat-error>\n    </mat-form-field>\n    <p></p>\n    <button mat-raised-button style=\"width: 20%; background-color: firebrick;\" (click)=generatePunch(g_date.value,g_start.value,g_end.value)>Punch</button>\n    <mat-error>{{generateShiftRes}}</mat-error>\n</mat-card>\n\n<p></p>\n<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center\">Shift Status</mat-card-title>\n    <p></p>\n    <mat-card-title style=\"text-align: center; color: orange; font-size: 50px;\">{{shiftStatus}}</mat-card-title>\n</mat-card>"
+module.exports = "<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center;\">Punch Now</mat-card-title>\n    <button mat-raised-button style=\"width: 50%; background-color: firebrick; left: 25%\" (click)=\"autoPunch()\">Punch</button>\n    <p></p>\n    <mat-progress-bar mode=\"indeterminate\" *ngIf=\"progressBar\"></mat-progress-bar>\n</mat-card>\n<p></p>\n<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center\">Generate Shift</mat-card-title>\n    <mat-form-field class=\"example-full-width\">\n        <input #g_date matInput [min]=\"minDate\" [max]=\"maxDate\" [matDatepicker]=\"picker\" placeholder=\"Choose a date\"\n            [formControl]=\"dateFormControl\" [errorStateMatcher]=\"matcherDate\" />\n        <mat-datepicker-toggle matSuffix [for]=\"picker\"></mat-datepicker-toggle>\n        <mat-datepicker #picker></mat-datepicker>\n        <mat-error *ngIf=\"dateFormControl.hasError('required')\">Date is <strong>required</strong></mat-error>\n    </mat-form-field>\n\n    <mat-form-field class=\"example-full-width\">\n        <input #g_start matInput placeholder=\"Choose the start time\" [formControl]=\"startTimeFormControl\"\n            [errorStateMatcher]=\"matcherSTime\" />\n        <mat-error *ngIf=\"startTimeFormControl.hasError('required')\">Start time is <strong>required</strong></mat-error>\n    </mat-form-field>\n\n    <mat-form-field class=\"example-full-width\">\n        <input #g_end matInput placeholder=\"Choose the end time\" [formControl]=\"endTimeFormControl\" [errorStateMatcher]=\"matcherETime\" />\n        <mat-error *ngIf=\"endTimeFormControl.hasError('required')\">End time is <strong>required</strong></mat-error>\n    </mat-form-field>\n    <p></p>\n    <button mat-raised-button style=\"width: 20%; background-color: firebrick;\" (click)=generatePunch(g_date.value,g_start.value,g_end.value)>Punch</button>\n    <mat-error>{{generateShiftRes}}</mat-error>\n</mat-card>\n\n<p></p>\n<mat-card style=\"padding: 10px\">\n    <mat-card-title style=\"text-align: center\">Shift Status</mat-card-title>\n    <p></p>\n    <mat-card-title style=\"text-align: center; color: orange; font-size: 50px;\">{{shiftStatus}}</mat-card-title>\n</mat-card>"
 
 /***/ }),
 
@@ -91,10 +91,10 @@ var AddShiftComponent = /** @class */ (function () {
             this.newShift = this.createShift(now);
             var res = this.addShiftService.setShift(this.newShift);
             if (res === false) {
-                this.punchSuccess("Punch failed, try again", "");
+                this.popUp("Punch failed, try again", "", 1000);
                 return;
             }
-            this.punchSuccess("Punch success", "");
+            this.popUp("Punch success", "", 1000);
             this.stateService.setState(!this.onShift);
             this.onShift = !this.onShift;
             this.updtateStateStatus();
@@ -103,10 +103,10 @@ var AddShiftComponent = /** @class */ (function () {
             this.newShift = this.updateShift(now);
             var res = this.addShiftService.setShift(this.newShift);
             if (res === false) {
-                this.punchSuccess("Punch failed, try again", "");
+                this.popUp("Punch failed, try again", "", 1000);
                 return;
             }
-            this.punchSuccess("Punch success", "");
+            this.popUp("Punch success", "", 1000);
             this.stateService.setState(!this.onShift);
             this.onShift = !this.onShift;
             this.updtateStateStatus();
@@ -117,8 +117,23 @@ var AddShiftComponent = /** @class */ (function () {
             this.generateShiftRes = 'Invalid input, Please try again';
             return;
         }
-        this.generateShiftRes = '';
-        this.punchSuccess("Punch success", "");
+        this.onShift = this.stateService.getState();
+        var newShift = { date: date, startTime: start, endTime: end };
+        if (this.onShift === false) {
+            var res = this.addShiftService.setShift(newShift);
+            if (res === false) {
+                this.popUp("Punch failed, try again", "", 1000);
+                return;
+            }
+            this.generateShiftRes = '';
+            this.popUp("Punch success", "", 1000);
+            this.onShift = !this.onShift;
+            this.updtateStateStatus();
+        }
+        else {
+            this.popUp("You are ON shift, Please click punch to end the previous shift... ", "", 3000);
+            return;
+        }
     };
     AddShiftComponent.prototype.updtateStateStatus = function () {
         if (this.onShift === true) {
@@ -139,9 +154,9 @@ var AddShiftComponent = /** @class */ (function () {
         editedShift.endTime = now.getHours() + ":" + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
         return editedShift;
     };
-    AddShiftComponent.prototype.punchSuccess = function (message, action) {
+    AddShiftComponent.prototype.popUp = function (message, action, duration) {
         this.snackBar.open(message, action, {
-            duration: 1000,
+            duration: duration,
             verticalPosition: 'bottom',
         });
     };
@@ -181,7 +196,7 @@ module.exports = ".example-container {\n    width: 100%;\n    height: 100%;\n   
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<mat-toolbar class=\"main-toolbar\" style=\"padding: 5px\">\n    <mat-toolbar-row>\n        <div class=\"example-sidenav-content\">\n            <button type=\"button\" class=\"main-menu-button\" mat-raised-button (click)=\"drawer.toggle()\" style=\"background-color:brown\">\n                Toggle Main Menu\n            </button>\n            <span style=\"left:45%; position: absolute\">My Shifts</span>\n        </div>\n    </mat-toolbar-row>\n</mat-toolbar>\n<mat-drawer-container class=\"example-container\" autosize>\n    <mat-drawer #drawer class=\"example-sidenav\" mode=\"side\">\n        <button (click)=\"toggleComponent(0)\" mat-raised-button style=\"width: 100%; background-color: peru\">\n            Home\n        </button>\n        <p></p>\n        <button (click)=\"toggleComponent(1)\" mat-raised-button style=\"width: 100%; background-color: peru\">\n            Add Shift\n        </button>\n        <p></p>\n        <button (click)=\"toggleComponent(2)\" mat-raised-button style=\"width: 100%; background-color: peru\">\n            Edit Shifts\n        </button>\n        <p></p>\n        <button (click)=\"toggleComponent(3)\" mat-raised-button style=\"width: 100%; background-color: peru\">\n            Generate Report\n        </button>\n        <p></p>\n        <button (click)=\"toggleComponent(4)\" mat-raised-button style=\"width: 100%; background-color: peru\">\n            Statitstics\n        </button>\n    </mat-drawer>\n    <mat-drawer-container class=\"example-container-main-window\" autosize>\n        <app-main-window *ngIf=\"isMainWindow\"></app-main-window>\n        <app-add-shift *ngIf=\"isAdd\"></app-add-shift>\n        <app-eddit-shifts *ngIf=\"isEddit\"></app-eddit-shifts>\n    </mat-drawer-container>\n</mat-drawer-container>\n\n<!-- <router-outlet></router-outlet> -->"
+module.exports = "<mat-toolbar class=\"main-toolbar\" style=\"padding: 5px\">\n    <mat-toolbar-row>\n        <div class=\"example-sidenav-content\">\n            <button type=\"button\" class=\"main-menu-button\" mat-raised-button (click)=\"drawer.toggle()\" style=\"background-color:brown\">\n                Toggle Main Menu\n            </button>\n            <span style=\"left:45%; position: absolute\">My Shifts</span>\n        </div>\n    </mat-toolbar-row>\n</mat-toolbar>\n<mat-drawer-container class=\"example-container\" autosize>\n    <mat-drawer #drawer class=\"example-sidenav\" mode=\"side\">\n        <button (click)=\"toggleComponent(0)\" mat-raised-button style=\"width: 100%; background-color: peru\">\n            Home\n        </button>\n        <p></p>\n        <button (click)=\"toggleComponent(1)\" mat-raised-button style=\"width: 100%; background-color: peru\">\n            Add Shift\n        </button>\n        <p></p>\n        <button (click)=\"toggleComponent(2)\" mat-raised-button style=\"width: 100%; background-color: peru\">\n            Edit Shifts\n        </button>\n        <p></p>\n        <button (click)=\"toggleComponent(3)\" mat-raised-button style=\"width: 100%; background-color: peru\">\n            Generate Report\n        </button>\n        <p></p>\n        <button (click)=\"toggleComponent(4)\" mat-raised-button style=\"width: 100%; background-color: peru\">\n            Statitstics\n        </button>\n    </mat-drawer>\n    <mat-drawer-container class=\"example-container-main-window\" autosize>\n        <app-main-window *ngIf=\"isMainWindow\"></app-main-window>\n        <app-add-shift *ngIf=\"isAdd\"></app-add-shift>\n        <app-eddit-shifts *ngIf=\"isEddit\"></app-eddit-shifts>\n        <app-generate-report *ngIf=\"isGenerate\"></app-generate-report>\n    </mat-drawer-container>\n</mat-drawer-container>\n\n<!-- <router-outlet></router-outlet> -->"
 
 /***/ }),
 
@@ -205,6 +220,7 @@ var AppComponent = /** @class */ (function () {
         this.isAdd = false;
         this.isMainWindow = true;
         this.isEddit = false;
+        this.isGenerate = false;
     }
     AppComponent.prototype.toggleComponent = function (e) {
         if (e === 0) // Home button clicked
@@ -212,18 +228,28 @@ var AppComponent = /** @class */ (function () {
             this.isMainWindow = true;
             this.isAdd = false;
             this.isEddit = false;
+            this.isGenerate = false;
         }
         else if (e === 1) // Add shift button clicked
          {
             this.isAdd = true;
             this.isMainWindow = false;
             this.isEddit = false;
+            this.isGenerate = false;
         }
         else if (e === 2) // Edit shift button clicked
          {
             this.isAdd = false;
             this.isMainWindow = false;
             this.isEddit = true;
+            this.isGenerate = false;
+        }
+        else if (e === 3) // Edit shift button clicked
+         {
+            this.isAdd = false;
+            this.isMainWindow = false;
+            this.isEddit = false;
+            this.isGenerate = true;
         }
     };
     AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -289,6 +315,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm5/paginator.es5.js");
 /* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm5/animations.js");
 /* harmony import */ var _eddit_shifts_eddit_shifts_component__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./eddit-shifts/eddit-shifts.component */ "./src/app/eddit-shifts/eddit-shifts.component.ts");
+/* harmony import */ var _generate_report_generate_report_component__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./generate-report/generate-report.component */ "./src/app/generate-report/generate-report.component.ts");
 
 
 
@@ -299,6 +326,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // Angular Material Components
+
 
 
 
@@ -342,6 +370,7 @@ var AppModule = /** @class */ (function () {
                 _add_shift_add_shift_component__WEBPACK_IMPORTED_MODULE_5__["AddShiftComponent"],
                 _eddit_shifts_eddit_shifts_component__WEBPACK_IMPORTED_MODULE_38__["EdditShiftsComponent"],
                 _eddit_shifts_eddit_shifts_component__WEBPACK_IMPORTED_MODULE_38__["EditOneShiftComponent"],
+                _generate_report_generate_report_component__WEBPACK_IMPORTED_MODULE_39__["GenerateReportComponent"],
             ],
             entryComponents: [
                 _eddit_shifts_eddit_shifts_component__WEBPACK_IMPORTED_MODULE_38__["EditOneShiftComponent"],
@@ -517,6 +546,62 @@ var EditOneShiftComponent = /** @class */ (function () {
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_material__WEBPACK_IMPORTED_MODULE_3__["MatDialogRef"], _shifts_service__WEBPACK_IMPORTED_MODULE_2__["ShiftsService"], Object])
     ], EditOneShiftComponent);
     return EditOneShiftComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/generate-report/generate-report.component.css":
+/*!***************************************************************!*\
+  !*** ./src/app/generate-report/generate-report.component.css ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2dlbmVyYXRlLXJlcG9ydC9nZW5lcmF0ZS1yZXBvcnQuY29tcG9uZW50LmNzcyJ9 */"
+
+/***/ }),
+
+/***/ "./src/app/generate-report/generate-report.component.html":
+/*!****************************************************************!*\
+  !*** ./src/app/generate-report/generate-report.component.html ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<p>\n  generate-report works!\n</p>\n"
+
+/***/ }),
+
+/***/ "./src/app/generate-report/generate-report.component.ts":
+/*!**************************************************************!*\
+  !*** ./src/app/generate-report/generate-report.component.ts ***!
+  \**************************************************************/
+/*! exports provided: GenerateReportComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GenerateReportComponent", function() { return GenerateReportComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+var GenerateReportComponent = /** @class */ (function () {
+    function GenerateReportComponent() {
+    }
+    GenerateReportComponent.prototype.ngOnInit = function () {
+    };
+    GenerateReportComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-generate-report',
+            template: __webpack_require__(/*! ./generate-report.component.html */ "./src/app/generate-report/generate-report.component.html"),
+            styles: [__webpack_require__(/*! ./generate-report.component.css */ "./src/app/generate-report/generate-report.component.css")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], GenerateReportComponent);
+    return GenerateReportComponent;
 }());
 
 

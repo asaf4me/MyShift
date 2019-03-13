@@ -1,82 +1,12 @@
 [
     {
-        "date": "7/2/2019",
-        "endTime": "12:55",
-        "startTime": "10:51"
-    },
-    {
-        "date": "7/2/2019",
-        "endTime": "14:59",
-        "startTime": "14:59"
-    },
-    {
-        "date": "7/2/2019",
-        "endTime": "16:02",
-        "startTime": "15:50"
-    },
-    {
-        "date": "7/2/2018",
-        "endTime": "16:12",
-        "startTime": "16:11"
-    },
-    {
-        "date": "12/2/2019",
-        "endTime": "8:37",
-        "startTime": "8:26"
-    },
-    {
-        "date": "12/2/2019",
-        "endTime": "15:22",
-        "startTime": "15:18"
-    },
-    {
-        "date": "12/2/2019",
-        "endTime": "15:30",
-        "startTime": "15:25"
-    },
-    {
-        "date": "12/2/2019",
-        "endTime": "15:44",
-        "startTime": "15:44"
-    },
-    {
-        "date": "12/2/2019",
-        "endTime": "15:46",
-        "startTime": "15:45"
+        "date": "13/2/2019",
+        "endTime": "15:16",
+        "startTime": "11:16"
     },
     {
         "date": "13/2/2019",
-        "endTime": "10:35",
-        "startTime": "10:35"
-    },
-    {
-        "date": "3/13/2019",
-        "endTime": "13:00",
-        "startTime": "12:00"
-    },
-    {
-        "date": "3/14/2019",
-        "endTime": "14:00",
-        "startTime": "13:00"
-    },
-    {
-        "date": "13/2/2019",
-        "endTime": "10:47",
-        "startTime": "10:47"
-    },
-    {
-        "date": "3/14/2019",
-        "endTime": "15:20",
-        "startTime": "16:00"
-    },
-    {
-        "date": "13/2/2019",
-        "endTime": "10:52",
-        "startTime": "10:50"
-    },
-    {
-        "date": "3/14/2019",
-        "endTime": "13:00",
-        "startTime": "12:00"
+        "endTime": "12:05",
+        "startTime": "11:54"
     }
 ]
