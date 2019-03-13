@@ -341,6 +341,10 @@ var AppModule = /** @class */ (function () {
                 _main_window_main_window_component__WEBPACK_IMPORTED_MODULE_4__["MainWindowComponent"],
                 _add_shift_add_shift_component__WEBPACK_IMPORTED_MODULE_5__["AddShiftComponent"],
                 _eddit_shifts_eddit_shifts_component__WEBPACK_IMPORTED_MODULE_38__["EdditShiftsComponent"],
+                _eddit_shifts_eddit_shifts_component__WEBPACK_IMPORTED_MODULE_38__["EditOneShiftComponent"],
+            ],
+            entryComponents: [
+                _eddit_shifts_eddit_shifts_component__WEBPACK_IMPORTED_MODULE_38__["EditOneShiftComponent"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -391,6 +395,17 @@ var AppModule = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/eddit-shifts/eddit-shift-dialog.html":
+/*!******************************************************!*\
+  !*** ./src/app/eddit-shifts/eddit-shift-dialog.html ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<ng-container>\n    <h4>Edit Shift</h4>\n    <mat-form-field class=\"example-full-width\">\n        <input #Day matInput placeholder=\"Day\" value=\"{{ data.day }}\" [(ngModel)]=\"data.day\" style=\"width: 50%;\">\n    </mat-form-field>\n    <mat-form-field class=\"example-full-width\">\n        <input #Start matInput placeholder=\"Start Time\" value=\"{{ data.start }}\" [(ngModel)]=\"data.start\" style=\"width: 50%;\">\n    </mat-form-field>\n    <mat-form-field class=\"example-full-width\">\n        <input #End matInput placeholder=\"End Time\" value=\"{{ data.end }}\" [(ngModel)]=\"data.end\" style=\"width: 50%;\">\n    </mat-form-field>\n    <p></p>\n    <button mat-raised-button style=\"color: darkgoldenrod\" (click)=\"done(data.position ,Day.value, Start.value, End.value)\">Done</button>\n</ng-container>"
+
+/***/ }),
+
 /***/ "./src/app/eddit-shifts/eddit-shifts.component.html":
 /*!**********************************************************!*\
   !*** ./src/app/eddit-shifts/eddit-shifts.component.html ***!
@@ -398,7 +413,7 @@ var AppModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<button mat-raised-button style=\"width: 30%; background-color: firebrick;\" (click)=\"removeAll()\">REMOVE ALL</button>\n<p></p>\n<table style=\"width: 100%\" mat-table [dataSource]=\"dataSource\" class=\"mat-elevation-z8\">\n\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"position\">\n        <th mat-header-cell *matHeaderCellDef> Shift No. </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.position}} </td>\n    </ng-container>\n\n    <!-- Day Column -->\n    <ng-container matColumnDef=\"day\">\n        <th mat-header-cell *matHeaderCellDef> Day </th>\n        <td mat-cell *matCellDef=\"let element\">{{element.day}}</td>\n    </ng-container>\n\n    <!-- Start Time Column -->\n    <ng-container matColumnDef=\"startTime\">\n        <th mat-header-cell *matHeaderCellDef> Start time </th>\n        <td mat-cell *matCellDef=\"let element\">{{element.startTime}}</td>\n    </ng-container>\n\n    <!-- End Time Column -->\n    <ng-container matColumnDef=\"endTime\">\n        <th mat-header-cell *matHeaderCellDef> End time </th>\n        <td mat-cell *matCellDef=\"let element\">{{element.endTime}}</td>\n    </ng-container>\n\n    <!-- Action Column -->\n    <ng-container matColumnDef=\"action\">\n        <th mat-header-cell *matHeaderCellDef style=\"text-align: center\"> Action </th>\n        <td mat-cell *matCellDef=\"let element\" style=\"padding: 10px\">\n            <button mat-raised-button style=\"left: 17%; color: darkgoldenrod\" (click)=\"editOne(element.position)\">EDIT</button>\n            <button mat-raised-button style=\"left: 20%; color: darkgoldenrod\" (click)=\"removeOne(element.position, element.day, element.startTime, element.endTime)\">REMOVE</button>\n        </td>\n    </ng-container>\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n</table>"
+module.exports = "<button mat-raised-button style=\"width: 30%; background-color: firebrick;\" (click)=\"removeAll()\">REMOVE ALL</button>\n<p></p>\n<table style=\"width: 100%\" mat-table [dataSource]=\"dataSource\" class=\"mat-elevation-z8\">\n\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"position\">\n        <th mat-header-cell *matHeaderCellDef> Shift No. </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.position}} </td>\n    </ng-container>\n\n    <!-- Day Column -->\n    <ng-container matColumnDef=\"day\">\n        <th mat-header-cell *matHeaderCellDef> Day </th>\n        <td mat-cell *matCellDef=\"let element\">{{element.day}}</td>\n    </ng-container>\n\n    <!-- Start Time Column -->\n    <ng-container matColumnDef=\"startTime\">\n        <th mat-header-cell *matHeaderCellDef> Start time </th>\n        <td mat-cell *matCellDef=\"let element\">{{element.startTime}}</td>\n    </ng-container>\n\n    <!-- End Time Column -->\n    <ng-container matColumnDef=\"endTime\">\n        <th mat-header-cell *matHeaderCellDef> End time </th>\n        <td mat-cell *matCellDef=\"let element\">{{element.endTime}}</td>\n    </ng-container>\n\n    <!-- Action Column -->\n    <ng-container matColumnDef=\"action\">\n        <th mat-header-cell *matHeaderCellDef style=\"text-align: center\"> Action </th>\n        <td mat-cell *matCellDef=\"let element\" style=\"padding: 10px\">\n            <button mat-raised-button style=\"left: 17%; color: darkgoldenrod\" (click)=\"editOne(element.position, element.day, element.startTime, element.endTime)\">EDIT</button>\n            <button mat-raised-button style=\"left: 20%; color: darkgoldenrod\" (click)=\"removeOne(element.position, element.day, element.startTime, element.endTime)\">REMOVE</button>\n        </td>\n    </ng-container>\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n</table>"
 
 /***/ }),
 
@@ -406,21 +421,25 @@ module.exports = "<button mat-raised-button style=\"width: 30%; background-color
 /*!********************************************************!*\
   !*** ./src/app/eddit-shifts/eddit-shifts.component.ts ***!
   \********************************************************/
-/*! exports provided: EdditShiftsComponent */
+/*! exports provided: EdditShiftsComponent, EditOneShiftComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EdditShiftsComponent", function() { return EdditShiftsComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EditOneShiftComponent", function() { return EditOneShiftComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _shifts_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shifts.service */ "./src/app/shifts.service.ts");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+
 
 
 
 var EdditShiftsComponent = /** @class */ (function () {
-    function EdditShiftsComponent(shiftService) {
+    function EdditShiftsComponent(shiftService, dialog) {
         this.shiftService = shiftService;
+        this.dialog = dialog;
         this.displayedColumns = ['position', 'day', 'startTime', 'endTime', 'action'];
     }
     EdditShiftsComponent.prototype.ngOnInit = function () {
@@ -450,18 +469,54 @@ var EdditShiftsComponent = /** @class */ (function () {
             this.bulidTable();
         }
     };
-    EdditShiftsComponent.prototype.editOne = function (position) {
-    };
-    EdditShiftsComponent.prototype.done = function (position, day, start, end) {
+    EdditShiftsComponent.prototype.editOne = function (position, day, start, end) {
+        var _this = this;
+        var dialogRef = this.dialog.open(EditOneShiftComponent, {
+            height: '250px',
+            width: '600px',
+            data: {
+                position: position,
+                day: day,
+                start: start,
+                end: end
+            }
+        });
+        dialogRef.afterClosed().subscribe(function (result) {
+            var res = _this.shiftService.editOne(result.position, result.day, result.start, result.end);
+            if (res === true) {
+                _this.bulidTable();
+            }
+        });
     };
     EdditShiftsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-eddit-shifts',
             template: __webpack_require__(/*! ./eddit-shifts.component.html */ "./src/app/eddit-shifts/eddit-shifts.component.html")
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_shifts_service__WEBPACK_IMPORTED_MODULE_2__["ShiftsService"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_shifts_service__WEBPACK_IMPORTED_MODULE_2__["ShiftsService"], _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatDialog"]])
     ], EdditShiftsComponent);
     return EdditShiftsComponent;
+}());
+
+var EditOneShiftComponent = /** @class */ (function () {
+    function EditOneShiftComponent(dialogRef, shiftService, data) {
+        this.dialogRef = dialogRef;
+        this.shiftService = shiftService;
+        this.data = data;
+    }
+    EditOneShiftComponent.prototype.done = function (position, day, start, end) {
+        var updated_shift = { position: position, day: day, start: start, end: end };
+        this.dialogRef.close(updated_shift);
+    };
+    EditOneShiftComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'eddit-shift-dialog',
+            template: __webpack_require__(/*! ./eddit-shift-dialog.html */ "./src/app/eddit-shifts/eddit-shift-dialog.html"),
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material__WEBPACK_IMPORTED_MODULE_3__["MAT_DIALOG_DATA"])),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_material__WEBPACK_IMPORTED_MODULE_3__["MatDialogRef"], _shifts_service__WEBPACK_IMPORTED_MODULE_2__["ShiftsService"], Object])
+    ], EditOneShiftComponent);
+    return EditOneShiftComponent;
 }());
 
 
@@ -557,7 +612,8 @@ var ShiftsService = /** @class */ (function () {
     ShiftsService.prototype.removeOne = function (position) {
         return this.ipc.sendSync('removeOne', position);
     };
-    ShiftsService.prototype.editOne = function (date, start, end) {
+    ShiftsService.prototype.editOne = function (position, date, start, end) {
+        return this.ipc.sendSync('editOne', position, { date: date, startTime: start, endTime: end });
     };
     ShiftsService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({

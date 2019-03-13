@@ -1,5 +1,14 @@
 <ng-container>
     <h4>Edit Shift</h4>
-    {{ data.day }} {{ data.start }} {{ data.end }}
-    <button mat-raised-button style="color: darkgoldenrod" (click)="done()">Done</button>
+    <mat-form-field class="example-full-width">
+        <input #Day matInput placeholder="Day" value="{{ data.day }}" [(ngModel)]="data.day" style="width: 50%;">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <input #Start matInput placeholder="Start Time" value="{{ data.start }}" [(ngModel)]="data.start" style="width: 50%;">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <input #End matInput placeholder="End Time" value="{{ data.end }}" [(ngModel)]="data.end" style="width: 50%;">
+    </mat-form-field>
+    <p></p>
+    <button mat-raised-button style="color: darkgoldenrod" (click)="done(data.position ,Day.value, Start.value, End.value)">Done</button>
 </ng-container>

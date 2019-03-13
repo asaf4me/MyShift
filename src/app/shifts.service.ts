@@ -44,8 +44,8 @@ export class ShiftsService {
     return this.ipc.sendSync('removeOne', position);
   }
 
-  public editOne(date: string, start: string, end: string){
-
+  public editOne(position:number, date: string, start: string, end: string){
+    return this.ipc.sendSync('editOne', position, { date: date, startTime: start, endTime: end });
   }
 
 }

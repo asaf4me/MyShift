@@ -54,12 +54,20 @@ export class EdditShiftsComponent implements OnInit {
 
 	public editOne(position: number, day: string, start: string, end: string) {
 		const dialogRef = this.dialog.open(EditOneShiftComponent, {
-			height: '200px',
-			width: '400px',
+			height: '250px',
+			width: '600px',
 			data:{
+				position: position,
 				day: day,
 				start: start,
 				end: end
+			}
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			let res = this.shiftService.editOne(result.position, result.day, result.start, result.end);
+			if(res === true){
+				this.bulidTable();
 			}
 		});
 	}
@@ -70,10 +78,11 @@ export class EdditShiftsComponent implements OnInit {
 	templateUrl: 'eddit-shift-dialog.html',
 })
 export class EditOneShiftComponent {
-	constructor(public dialogRef: MatDialogRef<EditOneShiftComponent>,
+	constructor(public dialogRef: MatDialogRef<EditOneShiftComponent>, private shiftService: ShiftsService,
 		@Inject(MAT_DIALOG_DATA) public data: any){ }
 		
 	public done(position: number, day: string, start: string, end: string) {
-		this.dialogRef.close();
+		let updated_shift = { position: position, day: day, start: start, end: end };
+		this.dialogRef.close(updated_shift);
 	}
 }

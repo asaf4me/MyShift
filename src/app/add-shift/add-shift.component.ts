@@ -52,10 +52,10 @@ export class AddShiftComponent implements OnInit {
       this.newShift = this.createShift(now);
       let res = this.addShiftService.setShift(this.newShift);
       if (res === false) {
-        this.punchSuccess("Punch failed, try again", "");
+        this.popUp("Punch failed, try again", "", 1000);
         return;
       }
-      this.punchSuccess("Punch success","");
+      this.popUp("Punch success", "", 1000);
       this.stateService.setState(!this.onShift);
       this.onShift = !this.onShift;
       this.updtateStateStatus();
@@ -63,10 +63,10 @@ export class AddShiftComponent implements OnInit {
       this.newShift = this.updateShift(now);
       let res = this.addShiftService.setShift(this.newShift);
       if (res === false) {
-        this.punchSuccess("Punch failed, try again", "");
+        this.popUp("Punch failed, try again", "", 1000);
         return;
       }
-      this.punchSuccess("Punch success", "");
+      this.popUp("Punch success", "", 1000);
       this.stateService.setState(!this.onShift);
       this.onShift = !this.onShift;
       this.updtateStateStatus();
@@ -78,8 +78,22 @@ export class AddShiftComponent implements OnInit {
       this.generateShiftRes = 'Invalid input, Please try again';
       return;
     }
-    this.generateShiftRes = '';
-    this.punchSuccess("Punch success", "");
+    this.onShift = this.stateService.getState();
+    let newShift = { date: date, startTime: start, endTime: end };
+    if (this.onShift === false) {
+      let res = this.addShiftService.setShift(newShift);
+      if (res === false) {
+        this.popUp("Punch failed, try again", "", 1000);
+        return;
+      }
+      this.generateShiftRes = '';
+      this.popUp("Punch success", "", 1000);
+      this.onShift = !this.onShift;
+      this.updtateStateStatus();
+    } else {
+      this.popUp("You are ON shift, Please click punch to end the previous shift... ", "", 3000);
+      return;
+    }
   }
 
   updtateStateStatus() {
@@ -103,9 +117,9 @@ export class AddShiftComponent implements OnInit {
     return editedShift;
   }
 
-  punchSuccess(message: string, action: string) {
+  popUp(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {
-      duration: 1000,
+      duration: duration,
       verticalPosition: 'bottom',
     });
   }

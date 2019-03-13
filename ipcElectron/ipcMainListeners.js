@@ -58,7 +58,20 @@ module.exports = () => {
             console.log(err);
             e.returnValue = false;
         }
-    })
+    });
+
+    ipcMain.on('editOne', (e, position, shift) => {
+        previousData[--position] = shift;
+        var json = JSON.stringify(previousData, null, 4);
+        try {
+            fs.writeFileSync(dataPath, json, 'utf8');
+            e.returnValue = true; // Retrun to rendered proccess that everything is O.K
+        }
+        catch (err) {
+            console.log(err);
+            e.returnValue = false;
+        }
+    });
 
     ipcMain.on('getState', (e) => {
         var state = fs.readFileSync(statePath,'utf8');

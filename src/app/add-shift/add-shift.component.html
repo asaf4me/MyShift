@@ -19,7 +19,7 @@
         <input #g_start matInput placeholder="Choose the start time" [formControl]="startTimeFormControl"
             [errorStateMatcher]="matcherSTime" />
         <mat-error *ngIf="startTimeFormControl.hasError('required')">Start time is <strong>required</strong></mat-error>
-    </mat-form-field>:
+    </mat-form-field>
 
     <mat-form-field class="example-full-width">
         <input #g_end matInput placeholder="Choose the end time" [formControl]="endTimeFormControl" [errorStateMatcher]="matcherETime" />
