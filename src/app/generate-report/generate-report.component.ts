@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import * as jsPDF from 'jspdf';
 import { ShiftsService } from '../shifts.service';
+import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { MailService } from '../mail.service';
+
 
 @Component({
   selector: 'app-generate-report',
@@ -9,8 +12,21 @@ import { ShiftsService } from '../shifts.service';
 })
 export class GenerateReportComponent implements OnInit {
 
+  fromControl = new FormControl('', [
+    Validators.required,
+  ]);
+  toControl = new FormControl('', [
+    Validators.required,
+  ]);
+  passControl = new FormControl('', [
+    Validators.required,
+  ]);
+  repassControl = new FormControl('', [
+    Validators.required,
+  ]);
+
   private shifts: [];
-  constructor(private shiftService: ShiftsService) { }
+  constructor(private shiftService: ShiftsService, private mail: MailService) { }
 
   ngOnInit() {
   }
@@ -39,5 +55,22 @@ export class GenerateReportComponent implements OnInit {
     doc.setFontSize(8).setTextColor(100);
     doc.text(80, 280, 'Report generate date : ' + date);
     doc.save('myShifts.pdf');
+  }
+
+  private sendMail(from: string, to: string, pass: string, repass: string){
+    if(pass !== repass)
+    {
+      alert("Password dont match");
+      return;
+    }
+    let res = this.mail.sendMail({from: from, to: to, pass: pass});
+  }
+
+  private upload(){
+
+  }
+
+  private saveSettings(from: string, to: string, pass: string, repass: string){
+
   }
 }

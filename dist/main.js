@@ -570,7 +570,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  generate-report works!\n</p>\n"
+module.exports = "<mat-card style=\"padding: 10px\">\n  <h4 style=\"text-align: center;\">Generate Report</h4>\n  <button mat-raised-button style=\"color: darkgoldenrod\" (click)=\"generatePDF()\">Generate Report</button>\n</mat-card>\n<p>\n\n<mat-card style=\"padding: 10px\">\n  <h4 style=\"text-align: center;\">Send Report</h4>\n  <mat-form-field class=\"example-full-width\" style=\"text-align: center; width: 100%\">\n    <input #from matInput  placeholder=\"From\" [formControl]=\"fromControl\"/>\n  </mat-form-field>\n  <p>\n  <mat-form-field class=\"example-full-width\" style=\"text-align: center; width: 100%\">\n    <input #pass matInput  placeholder=\"Pass\" [formControl]=\"passControl\"/>\n  </mat-form-field>\n  <p>\n  <mat-form-field class=\"example-full-width\" style=\"text-align: center; width: 100%\">\n    <input #repass matInput  placeholder=\"Re-Enter Password\" [formControl]=\"repassControl\"/>\n  </mat-form-field>\n  <p>\n  <mat-form-field class=\"example-full-width\" style=\"text-align: center; width: 100%\">\n    <input #to matInput  placeholder=\"To\" [formControl]=\"toControl\"/>\n  </mat-form-field>\n\n  <button mat-raised-button style=\"color: darkgoldenrod\" (click)=\"sendMail(from.value, to.value, pass.value, repass.value)\">Send</button>\n  <button mat-raised-button style=\"color: darkgoldenrod\" (click)=\"upload()\">Upload</button>\n  <button mat-raised-button style=\"color: darkgoldenrod\" (click)=\"saveSettings(from.value, to.value, pass.value, repass.value)\">Save Settings</button>\n\n</mat-card>\n\n"
 
 /***/ }),
 
@@ -586,20 +586,70 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GenerateReportComponent", function() { return GenerateReportComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _shifts_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shifts.service */ "./src/app/shifts.service.ts");
+/* harmony import */ var jspdf__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jspdf */ "./node_modules/jspdf/dist/jspdf.min.js");
+/* harmony import */ var jspdf__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jspdf__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _shifts_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shifts.service */ "./src/app/shifts.service.ts");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _mail_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../mail.service */ "./src/app/mail.service.ts");
+
+
+
 
 
 
 var GenerateReportComponent = /** @class */ (function () {
-    function GenerateReportComponent(shiftService) {
+    function GenerateReportComponent(shiftService, mail) {
         this.shiftService = shiftService;
+        this.mail = mail;
+        this.fromControl = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"]('', [
+            _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required,
+        ]);
+        this.toControl = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"]('', [
+            _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required,
+        ]);
+        this.passControl = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"]('', [
+            _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required,
+        ]);
+        this.repassControl = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"]('', [
+            _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required,
+        ]);
     }
     GenerateReportComponent.prototype.ngOnInit = function () {
-        this.shifts = this.getData();
-        console.log(this.shifts);
     };
     GenerateReportComponent.prototype.getData = function () {
         return this.shiftService.getShifts();
+    };
+    GenerateReportComponent.prototype.generatePDF = function () {
+        var doc = new jspdf__WEBPACK_IMPORTED_MODULE_2__();
+        this.shifts = this.getData();
+        var report = [];
+        doc.setFontSize(22);
+        doc.text(80, 20, 'Shifts Report');
+        doc.line(80, 22, 125, 22);
+        this.shifts.forEach(function (element, index) {
+            var temp = ++index + "               " + element.date + "               " + element.startTime + "                   " + element.endTime;
+            report.push(temp);
+        });
+        doc.setFontSize(8).setTextColor(0).setFontType('bold');
+        doc.text(55, 30, "Shift No" + "               " + "Shift date" + "                      " + "Shift start" + "                     " + "Shift end");
+        doc.setFontSize(12).setTextColor(0).setFontType('');
+        doc.text(58, 35, report);
+        var now = new Date();
+        var date = now.getDate() + "/" + now.getMonth() + "/" + now.getFullYear();
+        doc.setFontSize(8).setTextColor(100);
+        doc.text(80, 280, 'Report generate date : ' + date);
+        doc.save('myShifts.pdf');
+    };
+    GenerateReportComponent.prototype.sendMail = function (from, to, pass, repass) {
+        if (pass !== repass) {
+            alert("Password dont match");
+            return;
+        }
+        var res = this.mail.sendMail({ from: from, to: to, pass: pass });
+    };
+    GenerateReportComponent.prototype.upload = function () {
+    };
+    GenerateReportComponent.prototype.saveSettings = function (from, to, pass, repass) {
     };
     GenerateReportComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -607,9 +657,55 @@ var GenerateReportComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./generate-report.component.html */ "./src/app/generate-report/generate-report.component.html"),
             styles: [__webpack_require__(/*! ./generate-report.component.css */ "./src/app/generate-report/generate-report.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_shifts_service__WEBPACK_IMPORTED_MODULE_2__["ShiftsService"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_shifts_service__WEBPACK_IMPORTED_MODULE_3__["ShiftsService"], _mail_service__WEBPACK_IMPORTED_MODULE_5__["MailService"]])
     ], GenerateReportComponent);
     return GenerateReportComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/mail.service.ts":
+/*!*********************************!*\
+  !*** ./src/app/mail.service.ts ***!
+  \*********************************/
+/*! exports provided: MailService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MailService", function() { return MailService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+window.require = window.require || {};
+var MailService = /** @class */ (function () {
+    function MailService() {
+        this.ipc = void 0;
+        if (window.require) {
+            try {
+                this.ipc = window.require('electron').ipcRenderer;
+            }
+            catch (e) {
+                throw e;
+            }
+        }
+        else {
+            console.warn('Electron\'s IPC was not loaded');
+        }
+    }
+    MailService.prototype.sendMail = function (data) {
+        this.ipc.send('sendMail', data);
+    };
+    MailService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+            providedIn: 'root'
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], MailService);
+    return MailService;
 }());
 
 
@@ -835,7 +931,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_2__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /home/asaf/Desktop/Programming/Angular/shifts/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /home/asaf/Desktop/programming/node/angular/MyShift/src/main.ts */"./src/main.ts");
 
 
 /***/ })

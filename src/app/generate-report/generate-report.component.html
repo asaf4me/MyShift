@@ -1,4 +1,30 @@
-<ng-container>
-  <h4>Generate Report</h4>
+<mat-card style="padding: 10px">
+  <h4 style="text-align: center;">Generate Report</h4>
   <button mat-raised-button style="color: darkgoldenrod" (click)="generatePDF()">Generate Report</button>
-</ng-container>
+</mat-card>
+<p>
+
+<mat-card style="padding: 10px">
+  <h4 style="text-align: center;">Send Report</h4>
+  <mat-form-field class="example-full-width" style="text-align: center; width: 100%">
+    <input #from matInput  placeholder="From" [formControl]="fromControl"/>
+  </mat-form-field>
+  <p>
+  <mat-form-field class="example-full-width" style="text-align: center; width: 100%">
+    <input #pass matInput  placeholder="Pass" [formControl]="passControl"/>
+  </mat-form-field>
+  <p>
+  <mat-form-field class="example-full-width" style="text-align: center; width: 100%">
+    <input #repass matInput  placeholder="Re-Enter Password" [formControl]="repassControl"/>
+  </mat-form-field>
+  <p>
+  <mat-form-field class="example-full-width" style="text-align: center; width: 100%">
+    <input #to matInput  placeholder="To" [formControl]="toControl"/>
+  </mat-form-field>
+
+  <button mat-raised-button style="color: darkgoldenrod" (click)="sendMail(from.value, to.value, pass.value, repass.value)">Send</button>
+  <button mat-raised-button style="color: darkgoldenrod" (click)="upload()">Upload</button>
+  <button mat-raised-button style="color: darkgoldenrod" (click)="saveSettings(from.value, to.value, pass.value, repass.value)">Save Settings</button>
+
+</mat-card>
+

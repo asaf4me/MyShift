@@ -4,6 +4,8 @@ const { app, BrowserWindow } = require("electron");
 const path = require("path");
 const url = require("url");
 const registerIpcListeners = require('./ipcElectron/ipcMainListeners');
+const mailElectron = require('./ipcElectron/mailElectron');
+
 
 let win;
 
@@ -31,6 +33,7 @@ function createWindow() {
 app.on("ready", async () => {
     createWindow();
     registerIpcListeners();
+    mailElectron();
 });
 
 // on macOS, closing the window doesn't quit the app
