@@ -570,7 +570,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<mat-card style=\"padding: 10px\">\n  <h4 style=\"text-align: center;\">Generate Report</h4>\n  <button mat-raised-button style=\"color: darkgoldenrod\" (click)=\"generatePDF()\">Generate Report</button>\n</mat-card>\n<p>\n\n<mat-card style=\"padding: 10px\">\n  <h4 style=\"text-align: center;\">Send Report</h4>\n  <mat-form-field class=\"example-full-width\" style=\"text-align: center; width: 100%\">\n    <input #from matInput  placeholder=\"From\" [formControl]=\"fromControl\"/>\n  </mat-form-field>\n  <p>\n  <mat-form-field class=\"example-full-width\" style=\"text-align: center; width: 100%\">\n    <input #pass matInput  placeholder=\"Pass\" [formControl]=\"passControl\"/>\n  </mat-form-field>\n  <p>\n  <mat-form-field class=\"example-full-width\" style=\"text-align: center; width: 100%\">\n    <input #repass matInput  placeholder=\"Re-Enter Password\" [formControl]=\"repassControl\"/>\n  </mat-form-field>\n  <p>\n  <mat-form-field class=\"example-full-width\" style=\"text-align: center; width: 100%\">\n    <input #to matInput  placeholder=\"To\" [formControl]=\"toControl\"/>\n  </mat-form-field>\n\n  <button mat-raised-button style=\"color: darkgoldenrod\" (click)=\"sendMail(from.value, to.value, pass.value, repass.value)\">Send</button>\n  <button mat-raised-button style=\"color: darkgoldenrod\" (click)=\"upload()\">Upload</button>\n  <button mat-raised-button style=\"color: darkgoldenrod\" (click)=\"saveSettings(from.value, to.value, pass.value, repass.value)\">Save Settings</button>\n\n</mat-card>\n\n"
+module.exports = "<mat-card style=\"padding: 10px\">\n  <h4 style=\"text-align: center;\">Generate Report</h4>\n  <button mat-raised-button style=\"color: darkgoldenrod\" (click)=\"generatePDF()\">Generate Report</button>\n</mat-card>\n<p>\n\n<mat-card style=\"padding: 10px\">\n  <h4 style=\"text-align: center;\">Send Report</h4>\n  <mat-form-field class=\"example-full-width\" style=\"text-align: center; width: 100%\">\n    <input #from matInput  placeholder=\"From\" value=\"{{settings[0].from}}\" [formControl]=\"fromControl\"/>\n  </mat-form-field>\n  <p>\n  <mat-form-field class=\"example-full-width\" style=\"text-align: center; width: 100%\">\n    <input #pass matInput  placeholder=\"Password\" value=\"{{settings[0].pass}}\" [formControl]=\"passControl\"/>\n  </mat-form-field>\n  <p>\n  <mat-form-field class=\"example-full-width\" style=\"text-align: center; width: 100%\">\n    <input #repass matInput  placeholder=\"Re-type Password\" value=\"{{settings[0].pass}}\" [formControl]=\"repassControl\"/>\n  </mat-form-field>\n  <p>\n  <mat-form-field class=\"example-full-width\" style=\"text-align: center; width: 100%\">\n    <input #to matInput  placeholder=\"To\" value=\"{{settings[0].to}}\" [formControl]=\"toControl\"/>\n  </mat-form-field>\n\n  <button mat-raised-button style=\"color: darkgoldenrod\" (click)=\"sendMail(from.value, to.value, pass.value, repass.value)\">Upload and Send</button>\n  <button mat-raised-button style=\"color: darkgoldenrod\" (click)=\"saveSettings(from.value, to.value, pass.value)\">Save Settings</button>\n  <button mat-raised-button style=\"color: darkgoldenrod\" (click)=\"clearSettings()\">Clear Settings</button>\n\n</mat-card>\n\n"
 
 /***/ }),
 
@@ -615,6 +615,7 @@ var GenerateReportComponent = /** @class */ (function () {
         ]);
     }
     GenerateReportComponent.prototype.ngOnInit = function () {
+        this.loadSettings();
     };
     GenerateReportComponent.prototype.getData = function () {
         return this.shiftService.getShifts();
@@ -646,10 +647,27 @@ var GenerateReportComponent = /** @class */ (function () {
             return;
         }
         var res = this.mail.sendMail({ from: from, to: to, pass: pass });
+        if (res === true)
+            alert("Your email sent succesfully\n" + "From: " + from + "\nTo: " + to);
+        else
+            alert("Failed to send email to: " + to);
+    };
+    GenerateReportComponent.prototype.clearSettings = function () {
+        var res = this.mail.clearSettings();
+        if (res === true)
+            this.loadSettings();
     };
     GenerateReportComponent.prototype.upload = function () {
     };
-    GenerateReportComponent.prototype.saveSettings = function (from, to, pass, repass) {
+    GenerateReportComponent.prototype.saveSettings = function (from, to, pass) {
+        var res = this.mail.saveMailSettings({ from: from, to: to, pass: pass });
+        if (res === true)
+            alert("Your settings successfully saved");
+        else
+            alert("Failed to save your settings");
+    };
+    GenerateReportComponent.prototype.loadSettings = function () {
+        this.settings = this.mail.getSettings();
     };
     GenerateReportComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -697,7 +715,16 @@ var MailService = /** @class */ (function () {
         }
     }
     MailService.prototype.sendMail = function (data) {
-        this.ipc.send('sendMail', data);
+        return this.ipc.sendSync('sendMail', data);
+    };
+    MailService.prototype.saveMailSettings = function (data) {
+        return this.ipc.sendSync('saveMailSettings', data);
+    };
+    MailService.prototype.getSettings = function () {
+        return this.ipc.sendSync('getSettings');
+    };
+    MailService.prototype.clearSettings = function () {
+        return this.ipc.sendSync('clearSettings');
     };
     MailService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({

@@ -25,6 +25,18 @@ export class MailService {
   }
 
   public sendMail(data: Object){
-    this.ipc.send('sendMail', data);
+    return this.ipc.sendSync('sendMail', data);
+  }
+
+  public saveMailSettings(data: Object){
+    return this.ipc.sendSync('saveMailSettings', data);
+  }
+
+  public getSettings(){
+    return this.ipc.sendSync('getSettings');
+  }
+
+  public clearSettings(){
+    return this.ipc.sendSync('clearSettings');
   }
 }

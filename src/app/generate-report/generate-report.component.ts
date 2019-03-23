@@ -26,9 +26,11 @@ export class GenerateReportComponent implements OnInit {
   ]);
 
   private shifts: [];
+  public settings: object[];
   constructor(private shiftService: ShiftsService, private mail: MailService) { }
 
   ngOnInit() {
+    this.loadSettings();
   }
 
   private getData() {
@@ -57,20 +59,39 @@ export class GenerateReportComponent implements OnInit {
     doc.save('myShifts.pdf');
   }
 
-  private sendMail(from: string, to: string, pass: string, repass: string){
+  sendMail(from: string, to: string, pass: string, repass: string){
     if(pass !== repass)
     {
       alert("Password dont match");
       return;
     }
     let res = this.mail.sendMail({from: from, to: to, pass: pass});
+    if(res === true)
+      alert("Your email sent succesfully\n" + "From: " + from + "\nTo: " + to);
+    else
+      alert("Failed to send email to: " + to);
   }
 
-  private upload(){
+  clearSettings(){
+    let res = this.mail.clearSettings();
+    if(res === true)
+      this.loadSettings();
+  }
+
+  upload(){
 
   }
 
-  private saveSettings(from: string, to: string, pass: string, repass: string){
-
+  saveSettings(from: string, to: string, pass: string){
+    let res = this.mail.saveMailSettings({from: from, to: to, pass: pass});
+    if(res === true)
+      alert("Your settings successfully saved");
+    else
+      alert("Failed to save your settings");
   }
+
+  private loadSettings(){
+    this.settings = this.mail.getSettings();
+  }
+
 }

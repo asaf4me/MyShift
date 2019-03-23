@@ -7,24 +7,24 @@
 <mat-card style="padding: 10px">
   <h4 style="text-align: center;">Send Report</h4>
   <mat-form-field class="example-full-width" style="text-align: center; width: 100%">
-    <input #from matInput  placeholder="From" [formControl]="fromControl"/>
+    <input #from matInput  placeholder="From" value="{{settings[0].from}}" [formControl]="fromControl"/>
   </mat-form-field>
   <p>
   <mat-form-field class="example-full-width" style="text-align: center; width: 100%">
-    <input #pass matInput  placeholder="Pass" [formControl]="passControl"/>
+    <input #pass matInput  placeholder="Password" value="{{settings[0].pass}}" [formControl]="passControl"/>
   </mat-form-field>
   <p>
   <mat-form-field class="example-full-width" style="text-align: center; width: 100%">
-    <input #repass matInput  placeholder="Re-Enter Password" [formControl]="repassControl"/>
+    <input #repass matInput  placeholder="Re-type Password" value="{{settings[0].pass}}" [formControl]="repassControl"/>
   </mat-form-field>
   <p>
   <mat-form-field class="example-full-width" style="text-align: center; width: 100%">
-    <input #to matInput  placeholder="To" [formControl]="toControl"/>
+    <input #to matInput  placeholder="To" value="{{settings[0].to}}" [formControl]="toControl"/>
   </mat-form-field>
 
-  <button mat-raised-button style="color: darkgoldenrod" (click)="sendMail(from.value, to.value, pass.value, repass.value)">Send</button>
-  <button mat-raised-button style="color: darkgoldenrod" (click)="upload()">Upload</button>
-  <button mat-raised-button style="color: darkgoldenrod" (click)="saveSettings(from.value, to.value, pass.value, repass.value)">Save Settings</button>
+  <button mat-raised-button style="color: darkgoldenrod" (click)="sendMail(from.value, to.value, pass.value, repass.value)">Upload and Send</button>
+  <button mat-raised-button style="color: darkgoldenrod" (click)="saveSettings(from.value, to.value, pass.value)">Save Settings</button>
+  <button mat-raised-button style="color: darkgoldenrod" (click)="clearSettings()">Clear Settings</button>
 
 </mat-card>
 
