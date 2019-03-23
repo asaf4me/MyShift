@@ -78,10 +78,6 @@ export class GenerateReportComponent implements OnInit {
       this.loadSettings();
   }
 
-  upload(){
-
-  }
-
   saveSettings(from: string, to: string, pass: string){
     let res = this.mail.saveMailSettings({from: from, to: to, pass: pass});
     if(res === true)

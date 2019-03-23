@@ -16,10 +16,7 @@ module.exports = () => {
             }
             var file = readFile(fileName[0]);
             sendMail(file, data.from, data.to).then((res) => {
-                if(res === true)
-                    e.returnValue = true;
-                else
-                    e.returnValue = false;
+                e.returnValue = res;
             })
         });
 

@@ -657,8 +657,6 @@ var GenerateReportComponent = /** @class */ (function () {
         if (res === true)
             this.loadSettings();
     };
-    GenerateReportComponent.prototype.upload = function () {
-    };
     GenerateReportComponent.prototype.saveSettings = function (from, to, pass) {
         var res = this.mail.saveMailSettings({ from: from, to: to, pass: pass });
         if (res === true)

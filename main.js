@@ -13,17 +13,17 @@ function createWindow() {
     win = new BrowserWindow({ width: 1000, height: 800 });
     // win.maximize();
     // load the dist folder from Angular
-    // win.loadURL(
-    //     url.format({
-    //         pathname: path.join(__dirname, `/dist/index.html`),
-    //         protocol: "file:",
-    //         slashes: true
-    //     })
-    // );
+    win.loadURL(
+        url.format({
+            pathname: path.join(__dirname, `/dist/index.html`),
+            protocol: "file:",
+            slashes: true
+        })
+    );
     
     // The following is optional and will open the DevTools:
-    win.webContents.openDevTools();
-    win.loadURL('http://localhost:4200');
+    // win.webContents.openDevTools();
+    // win.loadURL('http://localhost:4200');
     
     win.on("closed", () => {
         win = null;
