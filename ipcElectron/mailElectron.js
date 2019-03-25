@@ -11,7 +11,7 @@ module.exports = () => {
 
     ipcMain.on('sendMail', (e, data) => {
         dialog.showOpenDialog((fileName)=>{
-            if(fileName === undefined){
+            if(!fileName || fileName === '' || fileName === undefined){
                 e.returnValue = false;
             }
             var file = readFile(fileName[0]);
